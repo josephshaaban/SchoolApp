@@ -1,0 +1,35 @@
+class Data{
+  String name;
+  String email;
+  String body;
+  Data(this.name, this.email, this.body);
+  Data.fromJson(Map<String, dynamic> json){
+    name= json['name'];
+    email= json['email'];
+    body= json['body'];
+  }
+}
+
+class ItemData{
+  String title;
+  String url;
+  String thumbnailUrl;
+  ItemData(this.title, this.url, this.thumbnailUrl);
+  ItemData.fromJson(Map<String, dynamic> json){
+    title= json['title'];
+    url= json['url'];
+    thumbnailUrl= json['thumbnailUrl'];
+  }
+}
+
+class Items{
+  String name;
+  String email;
+  String username;
+  Items(this.name, this.email, this.username);
+  Items.fromJson(Map<String, dynamic> json){
+    name= json['name'];
+    email= json['email'];
+    username= json['username'];
+  }
+}
