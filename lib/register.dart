@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import "package:form_field_validator/form_field_validator.dart";
 import 'news.dart';
 import 'main.dart';
 import 'reusable.dart';
@@ -16,11 +17,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  String email;
-  String password;
+  String email='';
+  String password='';
 
   @override
   Widget build(BuildContext context) {
@@ -62,36 +64,47 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Image.asset('assets/images/flutter_lo.png'))),
                           Padding(
                               padding: EdgeInsets.only(left:20.0,top: 20.0,right:20.0,bottom: 15.0),
-                              child: TextField(
-                                  textDirection: TextDirection.rtl,
-                                  textAlign: TextAlign.right,
-                                  controller: emailController,
-                                  decoration: InputDecoration(
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: AppTheme.textColor)),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(color: AppTheme.textColor),
-                                          borderRadius: BorderRadius.circular(30.0)),
-                                      hintStyle: TextStyle(fontSize: 20.0, color: AppTheme.textColor),
-                                      hintText: 'البريد الالكتروني')
-                              )),
+                              child: Directionality(
+                                  textDirection: TextDirection.ltr,
+                                  child: TextFormField(
+                                    autovalidateMode: AutovalidateMode.always,
+                                    textAlign: TextAlign.right,
+                                    controller: emailController,
+                                    decoration: InputDecoration(
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: AppTheme.textColor)),
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide(color: AppTheme.textColor),
+                                            borderRadius: BorderRadius.circular(30.0)),
+                                        hintStyle: TextStyle(fontSize: 20.0, color: AppTheme.textColor),
+                                        hintText: 'البريد الالكتروني'),
+                                    validator: EmailValidator(errorText: 'Not a Valid Email'),
+                                  ))),
                           Padding(
                               padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
-                              child: TextField(
-                                textDirection: TextDirection.rtl,
-                                textAlign: TextAlign.right,
-                                controller: passwordController,
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: AppTheme.textColor)),
-                                    border: OutlineInputBorder(
-                                        borderRadius: const BorderRadius.all(const Radius.circular(30.0)),
-                                        borderSide: BorderSide(color: AppTheme.textColor)),
-                                    hintTextDirection: TextDirection.rtl,
-                                    hintStyle: TextStyle(fontSize: 20.0, color: AppTheme.textColor),
-                                    hintText: ' كلمة المرور')
-                              )),
+                              child: Directionality(
+                                  textDirection: TextDirection.ltr,
+                                  child: TextFormField(
+                                      autovalidateMode: AutovalidateMode.always,
+                                      key: _formKey,
+                                      textAlign: TextAlign.right,
+                                      controller: passwordController,
+                                      validator: (value){
+                                        if (value.length < 6 && value.length >0 ) {
+                                          return "Should Be At Least 6 characters" ;
+                                        } else {
+                                          return null;
+                                        }},
+                                      decoration: InputDecoration(
+                                          focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: AppTheme.textColor)),
+                                          border: OutlineInputBorder(
+                                              borderRadius: const BorderRadius.all(const Radius.circular(30.0)),
+                                              borderSide: BorderSide(color: AppTheme.textColor)),
+                                          hintTextDirection: TextDirection.rtl,
+                                          hintStyle: TextStyle(fontSize: 20.0, color: AppTheme.textColor),
+                                          hintText: ' كلمة المرور')
+                                  ))),
                            Padding(
                               padding: const EdgeInsets.only(top: 20.0,bottom: 15.0),
                                        child: MaterialButton(
@@ -100,26 +113,18 @@ class _LoginPageState extends State<LoginPage> {
                                          child: Text("تسجيل الدخول", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900, color: AppTheme.backgroundColor)
                                          ),
                                          onPressed: () async {
-                                           email='user'; password='user';
+                                           email='user@gmail.com'; password='useruser';
                                            if ( emailController.text == email && passwordController.text == password) {
                                              SharedPreferences preferences = await SharedPreferences.getInstance();
                                              preferences.setString('email',emailController.text );
                                              Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
                                              );
-                                           } else{ email= 'admin'; password='admin';
+                                           } else{ email= 'admin@gmail.com'; password='adminadmin';
                                            if ( emailController.text == email && passwordController.text == password ){
                                              SharedPreferences preferences = await SharedPreferences.getInstance();
                                              preferences.setString("email",emailController.text );
-                                             Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()),
-                                             );
-                                           }
-                                             else{
-                                               showDialog(context: context, builder: (context) {
-                                                 return AlertDialog(content: Text("ادخل البريد الالكتروني و كلمة المرور",textAlign: TextAlign.center,
-                                            style: TextStyle(fontWeight: FontWeight.w900)),
-                                        );
-                                      });
-                                    }}},
+                                             Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()));
+                                           }}},
                               )),
                         Expanded(child: new Align(alignment: Alignment.bottomCenter,
                             child:SizedBox(

@@ -3,7 +3,6 @@ import 'dart:core';
 import 'data.dart';
 import 'reusable.dart';
 import 'package:flutter/material.dart';
-import 'data.dart';
 import 'package:http/http.dart' as http;
 
 class Item1Screen extends StatefulWidget {

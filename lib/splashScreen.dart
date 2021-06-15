@@ -18,7 +18,28 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         Duration(seconds: 4),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => Identity())));
+            builder: (BuildContext context) => Identity()))
+    );
+
+//    var initializationSettingsAndroid=
+  //      AndroidInitializationSettings('@mipmap/ic_launcher');
+  //  var initializationSettings = InitializationSettings(android: initializationSettingsAndroid );
+
+    //flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+   // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+     // RemoteNotification notification = message.notification;
+   //   AndroidNotification android = message.notification?.android;
+     // if(notification!=null && android!=null){
+       // flutterLocalNotificationsPlugin.show(
+         //   notification.hashCode, notification.title, notification.body,
+           // NotificationDetails(
+             // android: AndroidNotificationDetails(
+               // channel.id, channel.name,channel.description
+              //)
+            //));
+      //}
+    //});
   }
 
   @override
