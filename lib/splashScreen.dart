@@ -1,5 +1,10 @@
 import 'dart:async';
-import 'identity.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hello_world1/item3.dart';
+import 'package:hello_world1/selectSchool.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
@@ -15,10 +20,41 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (notification!= null && android != null){
+        flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+          notification.title,
+            notification.body,
+            NotificationDetails(
+                android: AndroidNotificationDetails(
+                    channel.id,
+                    channel.name,
+                    channel.description,
+                    icon: android?.smallIcon)
+            ));
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      var email = preferences.getString('email');
+      debugPrint('A new onMessageOpenedApp event was published!');
+      if (email!= null || email!='admin@gmail.com' ) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Item3Screen()));
+      }
+    });
+
+      Timer(
         Duration(seconds: 4),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => Identity()))
+            builder: (BuildContext context) => SelectSchool()))
     );
 
 //    var initializationSettingsAndroid=

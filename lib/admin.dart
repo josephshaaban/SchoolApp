@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'reusable.dart';
 import 'main.dart';
 
@@ -7,11 +8,7 @@ class AdminScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-        onWillPop: () => showDialog<bool>(
-        context: context,
-        builder: (c) => AlertDialog(
-          title: Text('تبديل الحساب أو تسجيل الخروج أولاً',textAlign: TextAlign.center),
-        )),
+        onWillPop: () =>  SystemNavigator.pop(),
         child: Scaffold(
             appBar: AppBar(
                 backgroundColor: AppTheme.textColor,

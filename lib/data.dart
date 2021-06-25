@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class Data{
   String name;
   String email;
@@ -32,4 +34,10 @@ class Items{
     email= json['email'];
     username= json['username'];
   }
+}
+
+class School {
+  const School(this.name,this.icon);
+  final String name;
+  final Icon icon;
 }
