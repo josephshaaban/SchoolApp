@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:flutter/services.dart';
+
 import 'main.dart';
 import 'package:flutter/cupertino.dart';
 import 'myGridView.dart';
@@ -55,13 +57,9 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return new WillPopScope(
-        onWillPop: () => showDialog<bool>(
-            context: context,
-            builder: (c) => AlertDialog(
-              title: Text('تبديل الحساب أو تسجيل الخروج أولاً',textAlign: TextAlign.center),
-            )),
-     child: Material(
-        child: Container(
+        onWillPop: () =>  SystemNavigator.pop(),
+        child: Material(
+         child: Container(
           width: size.width, height: size.height,
             child: SingleChildScrollView(
                 child: Column(

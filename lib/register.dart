@@ -49,8 +49,9 @@ class _LoginPageState extends State<LoginPage> {
                                MaterialPageRoute(builder: (context) => Identity()));
                          }))
                         )),
-
-                Container(
+    Expanded(  child: new Align(
+    alignment: Alignment.bottomCenter,
+                child:Container(
                   height: size.height-size.height/6,
                   alignment: Alignment.center,
                   child: Column(
@@ -87,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: TextFormField(
                                       autovalidateMode: AutovalidateMode.always,
                                       key: _formKey,
+                                      obscureText: true,
                                       textAlign: TextAlign.right,
                                       controller: passwordController,
                                       validator: (value){
@@ -126,16 +128,20 @@ class _LoginPageState extends State<LoginPage> {
                                              Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()));
                                            }}},
                               )),
-                        Expanded(child: new Align(alignment: Alignment.bottomCenter,
-                            child:SizedBox(
-                              height: size.height-(size.height-size.height/6),
-                              width: size.width,
-                              child: CustomPaint(
-                              painter: SecondWaveClipperBottom() ,
-                            ),
-                              ))),
+                        Expanded(
+                            child: Container(
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                          height: size.height - (size.height - size.height / 6),
+                                          width: size.width,
+                                          child: CustomPaint(
+                                            painter: SecondWaveClipperBottom(),
+                                          ))
+                                    ]))),
                         ]),
-                ),
+                ))),
                 ]))
          );
   }
