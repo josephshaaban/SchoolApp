@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hello_world1/identity.dart';
 import 'package:hello_world1/item3.dart';
-import 'package:hello_world1/selectSchool.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Timer(
         Duration(seconds: 4),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => SelectSchool()))
+            builder: (BuildContext context) => Identity()))
     );
 
 //    var initializationSettingsAndroid=
