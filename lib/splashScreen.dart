@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'identity.dart';
+import 'package:hello_world1/selectSchool.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         Duration(seconds: 4),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => Identity()))
+            builder: (BuildContext context) => SelectSchool()))
     );
 
 //    var initializationSettingsAndroid=
