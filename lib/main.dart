@@ -1,4 +1,4 @@
-import 'item3.dart';
+//import 'item3.dart';
 import 'splashScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +10,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
   print('Handling a background message ${message.messageId}');
   print (message.notification.title);
   print(message.notification.body);
   flutterLocalNotificationsPlugin.show(
-      message.notification.hashCode,
-     message.notification.title,
-      message.notification.body,
+      message.data.hashCode,
+     message.data['title'],
+      message.data['body'],
       NotificationDetails(
           android: AndroidNotificationDetails(
               channel.id,
@@ -38,11 +37,6 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-//Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
-  //await Firebase.initializeApp();
- // print ('A bg message just showed up: ${message.messageId}');
-//}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -51,12 +45,6 @@ void main() async {
   await flutterLocalNotificationsPlugin
   .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
   ?.createNotificationChannel(channel);
-
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
 
   SharedPreferences preferences = await SharedPreferences.getInstance();
   var email = preferences.getString('email');
