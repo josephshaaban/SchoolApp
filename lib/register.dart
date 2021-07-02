@@ -37,10 +37,28 @@ class _LoginPageState extends State<LoginPage> {
     if(saved_Logins!=null){
       List<Widget> logins=[];
       saved_Logins.forEach((key, value) {
-        logins.add(InkWell(child: Container(child: Text(key),) ,onTap: (){print(key + " "+ value);},));
+        logins.add(InkWell(child: Container(child: Text(key),) ,
+          onTap: ()async{
+            print(key + " "+ value);
+            email='user@gmail.com'; password='useruser';
+            if ( key == email && value == password) {
+              SharedPreferences preferences = await SharedPreferences.getInstance();
+              preferences.setString('email',key );
+              Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
+              );
+            } else{ email= 'admin@gmail.com'; password='adminadmin';
+            if ( key == email && value == password ){
+              SharedPreferences preferences = await SharedPreferences.getInstance();
+              preferences.setString("email",key );
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()));
+            }}
+
+        },));
 
       });
-      return Column(children: logins,);
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: logins,);
     }
     else {
       return CircularProgressIndicator(color: Colors.blue,);
@@ -162,7 +180,30 @@ class _LoginPageState extends State<LoginPage> {
                                              preferences.setString('saved_login', jsonEncode(m));
                                              },
                                 )),
-                          loader(),
+                          Padding(
+                              padding: const EdgeInsets.only(top: 20.0,bottom: 15.0),
+                              child: MaterialButton(
+                                color: AppTheme.textColor ,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                child: Text("حسابات مسجلة سابقا", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900, color: AppTheme.backgroundColor)
+                                ),
+                                onPressed: () async {
+                                  showDialog(context: context, builder:(context){
+                                    return AlertDialog(
+                                      content: loader(),
+                                      actions: [
+                                        MaterialButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Close'),
+                                        )
+                                      ],
+                                    );
+                                  } );
+                                },
+                              )),
+
 
                           ]),
                   ),

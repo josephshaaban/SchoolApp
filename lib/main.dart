@@ -12,22 +12,22 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Handling a background message ${message.messageId}');
-  print (message.notification.title);
-  print(message.notification.body);
-  flutterLocalNotificationsPlugin.show(
-      message.data.hashCode,
-     message.data['title'],
-      message.data['body'],
-      NotificationDetails(
-          android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channel.description,
-              icon: message.notification.android?.smallIcon)
-      ));
-}
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   print('Handling a background message ${message.messageId}');
+//   print (message.notification.title);
+//   print(message.notification.body);
+//   flutterLocalNotificationsPlugin.show(
+//       message.data.hashCode,
+//      message.data['title'],
+//       message.data['body'],
+//       NotificationDetails(
+//           android: AndroidNotificationDetails(
+//               channel.id,
+//               channel.name,
+//               channel.description,
+//               icon: message.notification.android?.smallIcon)
+//       ));
+// }
 
 
 class MessageHandler extends StatefulWidget {
@@ -64,14 +64,12 @@ class MessageHandlerState extends State<MessageHandler> {
                 channel.id,
                 channel.name,
                 channel.description,
-                // TODO add a proper drawable resource to android, for now using
-                //      one that already exists in example app.
-                icon: 'launch_background',
+                icon: message.notification.android?.smallIcon,
               ),
             ));
+
       }
     });
-
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('A new onMessageOpenedApp event was published!');
       Navigator.push(context, MaterialPageRoute(builder: (context)=>Item3Screen(payload: message.notification.body,)));
@@ -101,7 +99,7 @@ void main() async {
   await Firebase.initializeApp();
 
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
 
   await flutterLocalNotificationsPlugin
