@@ -1,42 +1,14 @@
-import 'dart:convert';
+//import 'dart:convert';
 import 'dart:core';
 import 'reusable.dart';
 import 'package:flutter/material.dart';
-import 'data.dart';
-import 'package:http/http.dart' as http;
+//import 'data.dart';
+//import 'package:http/http.dart' as http;
 
-class Item3Screen extends StatefulWidget {
-  @override
-  _Item3ScreenState createState() => _Item3ScreenState();
-}
+class Item3Screen extends StatelessWidget {
 
-class _Item3ScreenState extends State<Item3Screen> {
-  List<ItemData> _itemdata = <ItemData>[];
-
-  Future<List<ItemData>> fetchData() async{
-    var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1/photos'));
-
-    var itemdata= <ItemData>[];
-
-    if (response.statusCode == 200){
-      var dataJson= json.decode(response.body);
-      for (var dataJson in dataJson){
-        itemdata.add(ItemData.fromJson(dataJson));
-      }
-    }
-    return  itemdata;
-  }
-
-  @override
-  void initState(){
-    fetchData().then((value) {
-      setState(() {
-        _itemdata.addAll(value);
-      });
-    });
-    super.initState();
-
-  }
+  String payload;
+  Item3Screen({Key key, this.payload}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +16,9 @@ class _Item3ScreenState extends State<Item3Screen> {
         appBar:ReusableWidgets.getAppBar('صندوق الإشعارات'),
         body: ListView.builder(
           itemBuilder: (context, index) {
-            return ReusableWidgets.getCard(_itemdata[index].title,_itemdata[index].url,_itemdata[index].thumbnailUrl);
+            return Text(payload);
           },
           itemCount: 10,
         ));
   }
 }
-
-
