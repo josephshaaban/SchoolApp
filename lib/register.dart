@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'conversation.dart';
-import 'admin.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
             if ( key == email && value == password ){
               SharedPreferences preferences = await SharedPreferences.getInstance();
               preferences.setString("email",key );
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
             }}
 
         },));

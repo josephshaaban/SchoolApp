@@ -4,29 +4,11 @@ import 'package:hello_world1/item3.dart';
 import 'splashScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'admin.dart';
 import 'news.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   print('Handling a background message ${message.messageId}');
-//   print (message.notification.title);
-//   print(message.notification.body);
-//   flutterLocalNotificationsPlugin.show(
-//       message.data.hashCode,
-//      message.data['title'],
-//       message.data['body'],
-//       NotificationDetails(
-//           android: AndroidNotificationDetails(
-//               channel.id,
-//               channel.name,
-//               channel.description,
-//               icon: message.notification.android?.smallIcon)
-//       ));
-// }
 
 
 class MessageHandler extends StatefulWidget {
