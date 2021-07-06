@@ -1,10 +1,12 @@
 package com.example.test.test_school
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import androidx.constraintlayout.widget.Constraints.TAG
 
+@SuppressLint("MissingFirebaseInstanceTokenRefresh")
 internal class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 override fun onMessageReceived(remoteMessage: RemoteMessage) {

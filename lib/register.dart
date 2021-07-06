@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'conversation.dart';
 import 'admin.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
@@ -171,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                                              if ( emailController.text == email && passwordController.text == password ){
                                                SharedPreferences preferences = await SharedPreferences.getInstance();
                                                preferences.setString("email",emailController.text );
-                                               Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()));
+                                               Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
                                              }}
                                              SharedPreferences preferences = await SharedPreferences.getInstance();
                                              Map m;

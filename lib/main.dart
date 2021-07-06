@@ -1,7 +1,6 @@
-//import 'item3.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hello_world1/conversation.dart';
 import 'package:hello_world1/item3.dart';
-
 import 'splashScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +97,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
 
@@ -115,7 +113,7 @@ void main() async {
           },
             debugShowCheckedModeBanner: true,
             home: MessageHandler(child:email == null ? SplashScreen() : email == 'admin@gmail.com'
-                ? AdminScreen()
+                ? Conversation()
                 : NewsScreen())));
   }
 
