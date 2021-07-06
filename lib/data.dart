@@ -37,7 +37,14 @@ class Items{
 }
 
 class School {
-  const School(this.name,this.icon);
+  const School(this.name,this.ip);
   final String name;
-  final Icon icon;
+  final String ip;
+}
+
+class ChatUsers{
+  String name;
+  String messageText;
+  String image;
+  ChatUsers({@required this.name,@required this.messageText,@required this.image});
 }

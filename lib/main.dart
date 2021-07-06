@@ -1,11 +1,10 @@
 //import 'item3.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hello_world1/conversation.dart';
 import 'package:hello_world1/item3.dart';
-
 import 'splashScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'admin.dart';
 import 'news.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -115,7 +114,7 @@ void main() async {
           },
             debugShowCheckedModeBanner: true,
             home: MessageHandler(child:email == null ? SplashScreen() : email == 'admin@gmail.com'
-                ? AdminScreen()
+                ? Conversation()
                 : NewsScreen())));
   }
 

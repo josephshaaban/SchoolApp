@@ -1,12 +1,11 @@
 import 'dart:convert';
-
-import 'admin.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:form_field_validator/form_field_validator.dart";
+import 'conversation.dart';
 import 'news.dart';
 import 'main.dart';
 import 'reusable.dart';
@@ -50,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
             if ( key == email && value == password ){
               SharedPreferences preferences = await SharedPreferences.getInstance();
               preferences.setString("email",key );
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
             }}
 
         },));
@@ -171,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                                              if ( emailController.text == email && passwordController.text == password ){
                                                SharedPreferences preferences = await SharedPreferences.getInstance();
                                                preferences.setString("email",emailController.text );
-                                               Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()));
+                                               Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
                                              }}
                                              SharedPreferences preferences = await SharedPreferences.getInstance();
                                              Map m;

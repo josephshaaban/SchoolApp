@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
 import 'package:flutter/material.dart';
 import 'data.dart';
@@ -10,17 +11,21 @@ class SelectSchool extends StatefulWidget {
 }
 
 class _SelectSchoolState extends State<SelectSchool> {
+
+  String sName = '' ;
+  String sIp = '' ;
+
   @override
   void initState() {
     super.initState();
   }
 
   School selectedUser;
-  List<School> users = <School>[
-    const School('school1', Icon(Icons.school, color: const Color(0xFF003746))),
-    const School('school2', Icon(Icons.school, color: const Color(0xFF003746))),
-    const School('school3', Icon(Icons.school, color: const Color(0xFF003746))),
-    const School('school4', Icon(Icons.school, color: const Color(0xFF003746))),
+  List<School> schools = <School>[
+    const School('school1','ip 1'),
+    const School('school2','ip 2'),
+    const School('school3', 'ip 3'),
+    const School('school4', 'ip 4'),
   ];
 
   @override
@@ -40,33 +45,38 @@ class _SelectSchoolState extends State<SelectSchool> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            DropdownButton<School>(
-                              hint: Text("Select item", style: TextStyle(color: AppTheme.textColor)),
-                              value: selectedUser,
-                              // ignore: non_constant_identifier_names
-                              onChanged: (School Value) {
-                                setState(() {
-                                  selectedUser = Value;
-                                });
-                              },
-                              items: users.map((School user) {
-                                return DropdownMenuItem<School>(
-                                  value: user,
-                                  child: Row(
-                                      children: <Widget>[
-                                        user.icon,
-                                        SizedBox(width: 15),
-                                        MaterialButton(
-                                            onPressed: () => Navigator.push(context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => Identity())),
-                                            child: Text(user.name,
-                                                style: TextStyle(
-                                                    color: AppTheme.textColor))),
-                                      ]),
-                                );
-                              }).toList(),
-                            )])
+                            Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: AppTheme.textColor,width: 5)),
+                                child:  DropdownButton<School>(
+                                  hint: Text(" اختر مدرسة ", style: TextStyle(color: AppTheme.textColor,fontWeight: FontWeight.bold)),
+                                  value: selectedUser,
+                                  // ignore: non_constant_identifier_names
+                                  onChanged: (School Value) {
+                                    setState(() {
+                                      selectedUser = Value;
+                                    });
+                                  },
+                                  items: schools.map((School school) {
+                                    return DropdownMenuItem<School>(
+                                      value: school,
+                                      child: Row(
+                                          children: <Widget>[
+                                            SizedBox(width: 15),
+                                            MaterialButton(
+                                                onPressed: () async{
+                                                  SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                  preferences.setString('sIp',school.ip );
+                                                  preferences.setString('sName', school.name);
+                                                  Navigator.push(context,
+                                                      MaterialPageRoute(builder: (context) => Identity()));
+                                                },
+                                                child: Text(school.name, style: TextStyle(
+                                                    color: AppTheme.textColor,fontWeight: FontWeight.bold))),
+                                          ]),
+                                    );
+                                  }).toList(),
+                                ))])
                   )),
               Expanded(
                   child: Container(
