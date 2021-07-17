@@ -93,22 +93,22 @@ class _LoginPageState extends State<LoginPage> {
                                MaterialPageRoute(builder: (context) => Identity()));
                          }))
                         )),
-    Expanded(  child: new Align(
-    alignment: Alignment.bottomCenter,
-                child:SingleChildScrollView(
-                  child: Container(
-                    height: size.height-size.height/6,
-                    alignment: Alignment.center,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Center(
-                              child: Container(
-                                  padding: const EdgeInsets.only(bottom: 15.0),
-                                  width: 149,
-                                  height: 171,
-                                  child: Image.asset('assets/images/flutter_lo.png'))),
-                            Padding(
+                    Expanded(  child: new Align(
+                        alignment: Alignment.bottomCenter,
+                        child:SingleChildScrollView(
+                          child: Container(
+                           height: size.height-size.height/6,
+                            alignment: Alignment.center,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Center(
+                                      child: Container(
+                                          padding: const EdgeInsets.only(bottom: 15.0),
+                                          width: 149,
+                                          height: 171,
+                                          child: Image.asset('assets/images/flutter_lo.png'))),
+                              Padding(
                                 padding: EdgeInsets.only(left:20.0,top: 20.0,right:20.0,bottom: 15.0),
                                 child: Directionality(
                                     textDirection: TextDirection.ltr,
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                             hintText: ' كلمة المرور')
                                     ))),
                              Padding(
-                                padding: const EdgeInsets.only(top: 20.0,bottom: 15.0),
+                                padding: const EdgeInsets.only(top: 20.0,bottom: 10.0),
                                          child: MaterialButton(
                                            color: AppTheme.textColor ,
                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -179,12 +179,11 @@ class _LoginPageState extends State<LoginPage> {
                                              preferences.setString('saved_login', jsonEncode(m));
                                              },
                                 )),
-                          Padding(
-                              padding: const EdgeInsets.only(top: 20.0,bottom: 15.0),
-                              child: MaterialButton(
+                          MaterialButton(
                                 color: AppTheme.textColor ,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                child: Text("حسابات مسجلة سابقا", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900, color: AppTheme.backgroundColor)
+                                child: Text("حسابات مسجلة سابقا", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900,
+                                    color: AppTheme.backgroundColor)
                                 ),
                                 onPressed: () async {
                                   showDialog(context: context, builder:(context){
@@ -200,10 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ],
                                     );
                                   } );
-                                },
-                              )),
-
-
+                                }),
                           ]),
                   ),
                 ))),

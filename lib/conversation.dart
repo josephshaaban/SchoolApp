@@ -46,7 +46,7 @@ class _ConversationState extends State<Conversation> {
     ),
     ChatUsers(name: "John Wick",
       messageText: "How are you?",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
+      image: ''
     ),
   ];
 
@@ -92,12 +92,22 @@ class _ConversationState extends State<Conversation> {
               padding: EdgeInsets.only(top: 16),
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return ConversationList(
-                  name: chatUsers[index].name,
-                  messageText: chatUsers[index].messageText,
-                  imageUrl: chatUsers[index].image
-                );
-              },
+                if (chatUsers[index].image==null) {
+                  return ConversationList(
+                      name: chatUsers[index].name,
+                      messageText: chatUsers[index].messageText,
+                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
+                    ,
+                  );
+                }
+                else{
+                  return ConversationList(
+                      name: chatUsers[index].name,
+                      messageText: chatUsers[index].messageText,
+                      imageUrl: chatUsers[index].image
+                  );
+                }
+              }
             ),
           ],
         ),
@@ -107,7 +117,7 @@ class _ConversationState extends State<Conversation> {
   Widget _addNewConversation()   {
     if (email == "user@gmail.com") {
       return Container(
-          padding: EdgeInsets.only(left: 0, right: 8, top: 2, bottom: 2),
+          padding: EdgeInsets.only(left: 0, right: 5, top: 2, bottom: 2),
           height: 30,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
