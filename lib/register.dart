@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 hintText: ' كلمة المرور')
                                         ))),
                                 Padding(
-                                    padding: const EdgeInsets.only(top: 20.0,bottom: 15.0),
+                                    padding: const EdgeInsets.only(top: 20.0,bottom: 10.0),
                                     child: MaterialButton(
                                       color: AppTheme.textColor ,
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -179,31 +179,27 @@ class _LoginPageState extends State<LoginPage> {
                                         preferences.setString('saved_login', jsonEncode(m));
                                       },
                                     )),
-                                Padding(
-                                    padding: const EdgeInsets.only(top: 20.0,bottom: 15.0),
-                                    child: MaterialButton(
-                                      color: AppTheme.textColor ,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                      child: Text("حسابات مسجلة سابقا", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900, color: AppTheme.backgroundColor)
-                                      ),
-                                      onPressed: () async {
-                                        showDialog(context: context, builder:(context){
-                                          return AlertDialog(
-                                            content: loader(),
-                                            actions: [
-                                              MaterialButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text('Close'),
-                                              )
-                                            ],
-                                          );
-                                        } );
-                                      },
-                                    )),
-
-
+                                MaterialButton(
+                                    color: AppTheme.textColor ,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                    child: Text("حسابات مسجلة سابقا", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900,
+                                        color: AppTheme.backgroundColor)
+                                    ),
+                                    onPressed: () async {
+                                      showDialog(context: context, builder:(context){
+                                        return AlertDialog(
+                                          content: loader(),
+                                          actions: [
+                                            MaterialButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Close'),
+                                            )
+                                          ],
+                                        );
+                                      } );
+                                    }),
                               ]),
                         ),
                       ))),
