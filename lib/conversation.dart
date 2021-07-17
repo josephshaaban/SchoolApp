@@ -45,8 +45,7 @@ class _ConversationState extends State<Conversation> {
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "John Wick",
-      messageText: "How are you?",
-      image: ''
+      messageText: "How are you?"
     ),
   ];
 
