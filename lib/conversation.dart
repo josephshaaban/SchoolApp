@@ -1,3 +1,4 @@
+import 'package:hello_world1/chatPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
 import 'chatPage.dart';
@@ -17,34 +18,35 @@ class _ConversationState extends State<Conversation> {
   List<ChatUsers> chatUsers = [
     ChatUsers(name: "Jane Russel",
         messageText: "Awesome Setup",
-        image: "assets/images/teacher1.png"),
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
+    ),
     ChatUsers(name: "Glady's Murphy",
-      messageText: "That's Great",
-      image: "assets/images/teacher1.png",
+        messageText: "That's Great",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Jorge Henry",
-      messageText: "Hey where are you?",
-      image: "assets/images/teacher1.png",
+        messageText: "Hey where are you?",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Philip Fox",
-      messageText: "Busy! Call me in 20 mins",
-      image: "assets/images/teacher1.png",
+        messageText: "Busy! Call me in 20 mins",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Debra Hawkins",
-      messageText: "Thankyou, It's awesome",
-      image: "assets/images/teacher1.png",
+        messageText: "Thankyou, It's awesome",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Jacob Pena",
-      messageText: "will update you in evening",
-      image: "assets/images/teacher1.png",
+        messageText: "will update you in evening",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Andrey Jones",
-      messageText: "Can you please share the file?",
-      image: "assets/images/teacher1.png",
+        messageText: "Can you please share the file?",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "John Wick",
-      messageText: "How are you?",
-      image: "assets/images/teacher1.png",
+        messageText: "How are you?",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
   ];
 
@@ -91,9 +93,9 @@ class _ConversationState extends State<Conversation> {
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return ConversationList(
-                  name: chatUsers[index].name,
-                  messageText: chatUsers[index].messageText,
-                  imageUrl: chatUsers[index].image,
+                    name: chatUsers[index].name,
+                    messageText: chatUsers[index].messageText,
+                    imageUrl: chatUsers[index].image
                 );
               },
             ),
@@ -105,35 +107,27 @@ class _ConversationState extends State<Conversation> {
   Widget _addNewConversation()   {
     if (email == "user@gmail.com") {
       return Container(
-          padding: EdgeInsets.only(
-              left: 8, right: 8, top: 2, bottom: 2),
+          padding: EdgeInsets.only(left: 0, right: 5, top: 2, bottom: 2),
           height: 30,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: Colors.pink[50],
-          ),
-          child: Row(
-              children: <Widget>[
-                MaterialButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TeachersList()),
-                    );
-                  },
-                  child: Icon(Icons.add),
-                ),
-                SizedBox(width: 2),
-                Text("Add New",
-                    style: TextStyle(fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textColor))
-              ]));
+            color: Colors.pink[50],),
+          child: MaterialButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TeachersList()));
+              },
+              child:Row(children:[
+                Icon(Icons.add),
+                Text("Add New", style: TextStyle(fontSize: 14,
+                    fontWeight: FontWeight.bold, color: AppTheme.textColor))
+              ])));
     } else {
       return Container(
           padding: EdgeInsets.only(
               left: 8, right: 8, top: 2, bottom: 2),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
+            shape: BoxShape.circle,
             color: AppTheme.textColor,
           ),
           child: MyMaterialButton()
