@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:hello_world1/chatPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
@@ -66,7 +67,9 @@ class _ConversationState extends State<Conversation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new WillPopScope(
+        onWillPop: () =>  SystemNavigator.pop(),
+    child: Scaffold(
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
@@ -111,7 +114,7 @@ class _ConversationState extends State<Conversation> {
           ],
         ),
       ),
-    );
+    ));
   }
   Widget _addNewConversation()   {
     if (email == "user@gmail.com") {

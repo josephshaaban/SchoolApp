@@ -12,16 +12,16 @@ class Item6Screen extends StatefulWidget {
 }
 
 class _Item6ScreenState extends State<Item6Screen> {
-  List<Items> _items = <Items>[];
+  List<ItemData> _items = <ItemData>[];
 
-  Future<List<Items>> fetchData() async{
-    var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
-    var items= <Items>[];
+  Future<List<ItemData>> fetchData() async{
+    var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1/photos'));
+    var items= <ItemData>[];
 
     if (response.statusCode == 200){
       var dataJson= json.decode(response.body);
       for (var dataJson in dataJson){
-        items.add(Items.fromJson(dataJson));
+        items.add(ItemData.fromJson(dataJson));
       }
     }
     return  items;
@@ -43,7 +43,7 @@ class _Item6ScreenState extends State<Item6Screen> {
         appBar:ReusableWidgets.getAppBar('بنك الميديا'),
         body: ListView.builder(
           itemBuilder: (context, index){
-            return ReusableWidgets.getCard(_items[index].name,_items[index].email,_items[index].username);
+            return ReusableWidgets.getCard(_items[index].title,_items[index].thumbnailUrl,_items[index].url);
           },
           itemCount: _items.length,
         ));
