@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'conversation.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +23,27 @@ class _LoginPageState extends State<LoginPage> {
 
   String email='';
   String password='';
+  String sName;
+  String sIp;
+  String identity;
+  String identity1;
   Map saved_Logins;
+
+  Future getSchool() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      sName = preferences.getString ('sName');
+      sIp = preferences.getString('sIp');
+      identity= preferences.getString('identity');
+      identity1= preferences.getString('identity1');
+    });
+  }
 
   void init_data()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     print(preferences.getString('saved_login'));
     preferences.getString('saved_login')!=null?setState((){saved_Logins = jsonDecode(preferences.getString('saved_login'));}) :setState((){saved_Logins=Map();});
+    getSchool();
   }
   // loader will find all logged in account in this device then add them to widget array then put them in a column to display them
   Widget loader(){
@@ -45,15 +59,8 @@ class _LoginPageState extends State<LoginPage> {
               preferences.setString('email',key );
               Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
               );
-            } else{ email= 'admin@gmail.com'; password='adminadmin';
-            if ( key == email && value == password ){
-              SharedPreferences preferences = await SharedPreferences.getInstance();
-              preferences.setString("email",key );
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
-            }}
-
+            }
           },));
-
       });
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -164,14 +171,23 @@ class _LoginPageState extends State<LoginPage> {
                                         if ( emailController.text == email && passwordController.text == password) {
                                           SharedPreferences preferences = await SharedPreferences.getInstance();
                                           preferences.setString('email',emailController.text );
+                                          preferences.setString('sName', sName);
+                                          preferences.setString('sIp', sIp);
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
                                           );
-                                        } else{ email= 'admin@gmail.com'; password='adminadmin';
-                                        if ( emailController.text == email && passwordController.text == password ){
-                                          SharedPreferences preferences = await SharedPreferences.getInstance();
-                                          preferences.setString("email",emailController.text );
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
-                                        }}
+                                        } else{
+                                          // set up the AlertDialog
+                                          AlertDialog alert = AlertDialog(content: Text("هذاالحساب ليس حساب طالب",
+                                            textAlign: TextAlign.center,)
+                                          );
+                                          // show the dialog
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return alert;
+                                            },
+                                          );
+                                     }
                                         SharedPreferences preferences = await SharedPreferences.getInstance();
                                         Map m;
                                         preferences.getString('saved_login')!=null?m = jsonDecode(preferences.getString('saved_login')):m=Map<String,String>();
@@ -179,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                         preferences.setString('saved_login', jsonEncode(m));
                                       },
                                     )),
-                                MaterialButton(
+                              MaterialButton(
                                     color: AppTheme.textColor ,
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                     child: Text("حسابات مسجلة سابقا", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900,
