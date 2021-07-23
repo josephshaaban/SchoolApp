@@ -54,6 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
            notification.title,
              notification.body,
              NotificationDetails(
+
                  android: AndroidNotificationDetails(
                      channel.id,
                     channel.name,

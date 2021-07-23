@@ -19,7 +19,7 @@ class _Item4ScreenState extends State<Item4Screen> {
 
     var itemdata= <ItemData>[];
 
-    if (response.statusCode == 200){
+    if (response.body.isNotEmpty){
       var dataJson= json.decode(response.body);
       for (var dataJson in dataJson){
         itemdata.add(ItemData.fromJson(dataJson));
@@ -46,7 +46,7 @@ class _Item4ScreenState extends State<Item4Screen> {
         itemBuilder: (context, index) {
           return ReusableWidgets.getCard(_itemdata[index].title,_itemdata[index].url,_itemdata[index].thumbnailUrl);
         },
-        itemCount: 10,
+        itemCount: _itemdata.length,
       ));
   }
 }

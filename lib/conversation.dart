@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:hello_world1/chatPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
@@ -29,7 +30,7 @@ class _ConversationState extends State<Conversation> {
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Philip Fox",
-        messageText: "Busy! Call me in 20 mins",
+      messageText: "Busy! Call me in 20 mins",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Debra Hawkins",
@@ -41,11 +42,11 @@ class _ConversationState extends State<Conversation> {
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Andrey Jones",
-        messageText: "Can you please share the file?",
+      messageText: "Can you please share the file?",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "John Wick",
-        messageText: "How are you?",
+      messageText: "How are you?"
     ),
   ];
 
@@ -66,7 +67,9 @@ class _ConversationState extends State<Conversation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new WillPopScope(
+        onWillPop: () =>  SystemNavigator.pop(),
+    child: Scaffold(
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
@@ -91,11 +94,12 @@ class _ConversationState extends State<Conversation> {
               padding: EdgeInsets.only(top: 16),
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                if (chatUsers[index].image== null) {
+                if (chatUsers[index].image==null) {
                   return ConversationList(
                       name: chatUsers[index].name,
                       messageText: chatUsers[index].messageText,
-                      imageUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
+                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
+                    ,
                   );
                 }
                 else{
@@ -105,12 +109,12 @@ class _ConversationState extends State<Conversation> {
                       imageUrl: chatUsers[index].image
                   );
                 }
-              },
+              }
             ),
           ],
         ),
       ),
-    );
+    ));
   }
   Widget _addNewConversation()   {
     if (email == "user@gmail.com") {
@@ -121,15 +125,15 @@ class _ConversationState extends State<Conversation> {
             borderRadius: BorderRadius.circular(30),
             color: Colors.pink[50],),
           child: MaterialButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TeachersList()));
-              },
-              child:Row(children:[
-                Icon(Icons.add),
-                Text("Add New", style: TextStyle(fontSize: 14,
-                    fontWeight: FontWeight.bold, color: AppTheme.textColor))
-              ])));
+                    onPressed: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => TeachersList()));
+                      },
+                  child:Row(children:[
+                   Icon(Icons.add),
+                    Text("Add New", style: TextStyle(fontSize: 14,
+                            fontWeight: FontWeight.bold, color: AppTheme.textColor))
+                 ])));
     } else {
       return Container(
           padding: EdgeInsets.only(

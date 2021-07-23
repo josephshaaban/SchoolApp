@@ -95,3 +95,17 @@ void choiceAction(String value, BuildContext context) async {
         MaterialPageRoute(builder: (BuildContext context) => ChatPage()));
   }
 }
+
+//Future<Widget> _showButton() async{
+//SharedPreferences preferences = await SharedPreferences.getInstance();
+//var email = preferences.getString('email');
+//if (email=="admin@gmail.com"){
+
+//}
+//else {
+//return FloatingActionButton(
+//  backgroundColor: Colors.deepOrange[800],
+// child: Icon(Icons.add_shopping_cart),
+//onPressed: null);
+//}
+//}

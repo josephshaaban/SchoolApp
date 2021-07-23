@@ -1,21 +1,21 @@
 import 'dart:convert';
+import 'conversation.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:form_field_validator/form_field_validator.dart";
-import 'news.dart';
 import 'main.dart';
 import 'reusable.dart';
 
-class LoginPage extends StatefulWidget {
+class AdminLoginPage extends StatefulWidget {
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _AdminLoginPageState createState() => _AdminLoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _AdminLoginPageState extends State<AdminLoginPage> {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -23,44 +23,33 @@ class _LoginPageState extends State<LoginPage> {
 
   String email='';
   String password='';
-  String identity;
-  String identity1;
-  Map saved_Logins;
-
-  Future getSchool() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      identity= preferences.getString('identity');
-      identity1= preferences.getString('identity1');
-    });
-  }
+  Map saved_Logins1;
 
   void init_data()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    print(preferences.getString('saved_login'));
-    preferences.getString('saved_login')!=null?setState((){saved_Logins = jsonDecode(preferences.getString('saved_login'));}) :setState((){saved_Logins=Map();});
-    getSchool();
+    print(preferences.getString('saved_login1'));
+    preferences.getString('saved_login1')!=null?setState((){saved_Logins1 = jsonDecode(preferences.getString('saved_login1'));}) :setState((){saved_Logins1=Map();});
   }
   // loader will find all logged in account in this device then add them to widget array then put them in a column to display them
-  Widget loader(){
-    if(saved_Logins!=null){
+  Widget loader1(){
+    if(saved_Logins1!=null){
       List<Widget> logins=[];
-      saved_Logins.forEach((key, value) {
+      saved_Logins1.forEach((key, value) {
         logins.add(InkWell(child: Container(child: Text(key),) ,
-          onTap: ()async{
-            print(key + " "+ value);
-            email='user@gmail.com'; password='useruser';
-            if ( key == email && value == password) {
-              SharedPreferences preferences = await SharedPreferences.getInstance();
-              preferences.setString('email',key );
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
-              );
-            }
-          },));
+            onTap: ()async{
+              print(key + " "+ value);
+              email= 'admin@gmail.com'; password='adminadmin';
+              if ( key == email && value == password ){
+                SharedPreferences preferences = await SharedPreferences.getInstance();
+                preferences.setString("email",key );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
+              }}
+        ));
+
       });
       return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: logins,);
+          mainAxisSize: MainAxisSize.min,
+          children: logins);
     }
     else {
       return CircularProgressIndicator(color: Colors.blue,);
@@ -71,10 +60,10 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     init_data();
   }
+
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    return Scaffold(
+    final Size size = MediaQuery.of(context).size;  return Scaffold(
         body:  Container(
             child:Column(
                 mainAxisSize: MainAxisSize.min,
@@ -163,15 +152,15 @@ class _LoginPageState extends State<LoginPage> {
                                       child: Text("تسجيل الدخول", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900, color: AppTheme.backgroundColor)
                                       ),
                                       onPressed: () async {
-                                        email='user@gmail.com'; password='useruser';
+                                        email='admin@gmail.com'; password='adminadmin';
                                         if ( emailController.text == email && passwordController.text == password) {
                                           SharedPreferences preferences = await SharedPreferences.getInstance();
                                           preferences.setString('email',emailController.text );
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()),
                                           );
                                         } else{
                                           // set up the AlertDialog
-                                          AlertDialog alert = AlertDialog(content: Text("هذاالحساب ليس حساب طالب",
+                                          AlertDialog alert = AlertDialog(content: Text("هذاالحساب ليس حساب مشرف",
                                             textAlign: TextAlign.center,)
                                           );
                                           // show the dialog
@@ -184,9 +173,9 @@ class _LoginPageState extends State<LoginPage> {
                                         }
                                         SharedPreferences preferences = await SharedPreferences.getInstance();
                                         Map m;
-                                        preferences.getString('saved_login')!=null?m = jsonDecode(preferences.getString('saved_login')):m=Map<String,String>();
+                                        preferences.getString('saved_login1')!=null?m = jsonDecode(preferences.getString('saved_login1')):m=Map<String,String>();
                                         m[emailController.text.toLowerCase().trim()]=passwordController.text;
-                                        preferences.setString('saved_login', jsonEncode(m));
+                                        preferences.setString('saved_login1', jsonEncode(m));
                                       },
                                     )),
                                 MaterialButton(
@@ -198,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                                     onPressed: () async {
                                       showDialog(context: context, builder:(context){
                                         return AlertDialog(
-                                          content: loader(),
+                                          content: loader1(),
                                           actions: [
                                             MaterialButton(
                                               onPressed: () {
