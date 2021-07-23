@@ -130,25 +130,12 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
       return showDialog(
         context: context,
         builder: (context) => new AlertDialog(
-          content:FittedBox(
-              fit: BoxFit.fill ,
-              child:Column( children:<Widget>[
-                Padding(padding: EdgeInsets.only(bottom: 10.0),
-                    child: Text('Ads',style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center)),
-                Text( _news[2].name,
-                    style: TextStyle(color: AppTheme.textColor)),
-                Text( _news[3].email,
-                    style: TextStyle(color: AppTheme.textColor)),
-                Padding(padding: EdgeInsets.only(bottom: 10.0),
-                    child: Text( _news[4].body,
-                        style: TextStyle(color: AppTheme.textColor))),
-                Image.asset("assets/images/ll.png"),
-                Padding(padding: EdgeInsets.only(top: 10.0,bottom: 10.0),
-                    child: Image.asset("assets/images/rr.png")),
-                Text( _news[4].body,
-                    style: TextStyle(color: AppTheme.textColor)),
-              ])),
+          content: ListView.builder(
+            itemBuilder: (context, index) {
+              return Text(_news[index].body);
+            },
+            itemCount: _news.length,
+          ),
           actions: <Widget>[
             MaterialButton(
               child: new Text('إغلاق',textDirection: TextDirection.rtl,style:
