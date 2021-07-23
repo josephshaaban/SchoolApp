@@ -23,6 +23,8 @@ class _LoginPageState extends State<LoginPage> {
 
   String email='';
   String password='';
+  String sName;
+  String sIp;
   String identity;
   String identity1;
   Map saved_Logins;
@@ -30,6 +32,8 @@ class _LoginPageState extends State<LoginPage> {
   Future getSchool() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
+      sName = preferences.getString ('sName');
+      sIp = preferences.getString('sIp');
       identity= preferences.getString('identity');
       identity1= preferences.getString('identity1');
     });
@@ -53,6 +57,8 @@ class _LoginPageState extends State<LoginPage> {
             if ( key == email && value == password) {
               SharedPreferences preferences = await SharedPreferences.getInstance();
               preferences.setString('email',key );
+              preferences.setString('sName', sName);
+              preferences.setString('sIp', sIp);
               Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
               );
             }
@@ -167,6 +173,8 @@ class _LoginPageState extends State<LoginPage> {
                                         if ( emailController.text == email && passwordController.text == password) {
                                           SharedPreferences preferences = await SharedPreferences.getInstance();
                                           preferences.setString('email',emailController.text );
+                                          preferences.setString('sName', sName);
+                                          preferences.setString('sIp', sIp);
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
                                           );
                                         } else{

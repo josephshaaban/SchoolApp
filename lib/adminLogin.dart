@@ -23,7 +23,17 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
   String email='';
   String password='';
+  String sName;
+  String sIp;
   Map saved_Logins1;
+
+  Future getSchool() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      sName = preferences.getString ('sName');
+      sIp = preferences.getString('sIp');
+    });
+  }
 
   void init_data()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -59,6 +69,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   void initState() {
     super.initState();
     init_data();
+    getSchool();
   }
 
   @override
@@ -156,6 +167,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                         if ( emailController.text == email && passwordController.text == password) {
                                           SharedPreferences preferences = await SharedPreferences.getInstance();
                                           preferences.setString('email',emailController.text );
+                                          preferences.setString('sIp', sIp);
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()),
                                           );
                                         } else{
