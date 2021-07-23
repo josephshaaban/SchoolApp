@@ -23,7 +23,7 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
     var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts/1/comments'));
     var news= <Data>[];
 
-    if (response.body != null ){
+    if (response.statusCode == 200){
       var dataJson= json.decode(response.body);
       for (var dataJson in dataJson){
         news.add(Data.fromJson(dataJson));
@@ -33,13 +33,11 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
   }
 
   String email= "";
-  String sName = '';
 
   Future getEmail() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       email = preferences.getString ('email');
-      sName= preferences.getString('sName');
     });
   }
 
@@ -92,7 +90,7 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
                                       color: AppTheme.textColor,
                                       child: Column(
                                           children: <Widget>[
-                                          Text(sName, style: TextStyle(
+                                          Text(":مدرسة", style: TextStyle(
                                               fontSize: 30,fontWeight: FontWeight.w900,
                                               color: AppTheme.backgroundColor.withOpacity(1.0))),
                                           Text(email, textAlign: TextAlign.center, style: TextStyle(

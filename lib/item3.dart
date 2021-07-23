@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class Item3Screen extends StatelessWidget {
 
-  final payload;
+  String payload;
   Item3Screen({Key key, this.payload}) : super(key: key);
 
   @override
@@ -16,7 +16,7 @@ class Item3Screen extends StatelessWidget {
         appBar:ReusableWidgets.getAppBar('صندوق الإشعارات'),
         body: ListView.builder(
           itemBuilder: (context, index) {
-            return Text(payload ?? 'empty value');
+            return Text(payload);
           },
           itemCount: 10,
         ));

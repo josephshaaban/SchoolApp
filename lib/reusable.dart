@@ -20,9 +20,9 @@ class ReusableWidgets {
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(data1 ?? 'empty', style: TextStyle(fontSize:31, fontWeight: FontWeight.bold)),
-                Text(data2 ?? 'empty', style: TextStyle(color: Colors.blue)),
-                Text(data3 ?? 'empty', style: TextStyle(color: Colors.grey.shade800))
+                Text(data1, style: TextStyle(fontSize:31, fontWeight: FontWeight.bold)),
+                Text(data2, style: TextStyle(color: Colors.blue)),
+                Text(data3, style: TextStyle(color: Colors.grey.shade800))
               ]),
         ));
   }

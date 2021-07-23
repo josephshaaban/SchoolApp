@@ -12,26 +12,27 @@ class Item4Screen extends StatefulWidget {
 }
 
 class _Item4ScreenState extends State<Item4Screen> {
-  List<Items> _items = <Items>[];
+  List<ItemData> _itemdata = <ItemData>[];
 
-  Future<List<Items>> fetchData() async{
-    var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
-    var items= <Items>[];
+  Future<List<ItemData>> fetchData() async{
+    var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1/photos'));
 
-    if (response.body != null){
+    var itemdata= <ItemData>[];
+
+    if (response.statusCode == 200){
       var dataJson= json.decode(response.body);
       for (var dataJson in dataJson){
-        items.add(Items.fromJson(dataJson));
+        itemdata.add(ItemData.fromJson(dataJson));
       }
     }
-    return  items;
+    return  itemdata;
   }
 
   @override
   void initState(){
     fetchData().then((value) {
       setState(() {
-        _items.addAll(value);
+        _itemdata.addAll(value);
       });
     });
     super.initState();
@@ -40,13 +41,13 @@ class _Item4ScreenState extends State<Item4Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:ReusableWidgets.getAppBar('درجات الطالب '),
-        body: ListView.builder(
-          itemBuilder: (context, index){
-            return ReusableWidgets.getCard(_items[index].name ,_items[index].email,_items[index].username);
-          },
-          itemCount: _items.length,
-        ));
+        appBar:ReusableWidgets.getAppBar('درجات الطالب'),
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          return ReusableWidgets.getCard(_itemdata[index].title,_itemdata[index].url,_itemdata[index].thumbnailUrl);
+        },
+        itemCount: 10,
+      ));
   }
 }
 

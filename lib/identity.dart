@@ -2,8 +2,6 @@ import 'register.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'adminLogin.dart';
 import 'main.dart';
 import 'reusable.dart';
 
@@ -12,8 +10,6 @@ class Identity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    String identity = 'student' ;
-    String identity1 = 'admin' ;
     return Scaffold(
         body:   Container(
          child:Column(
@@ -44,10 +40,8 @@ class Identity extends StatelessWidget {
                                                         border: Border.all(color: AppTheme.textColor, width: 3)),
                                                     child:MaterialButton(
                                                         child: Image.asset('assets/images/teacher1.png'),
-                                                        onPressed: () async {
-                                                          SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                          preferences.setString("identity1", identity1);
-                                                          Navigator.push(context, MaterialPageRoute(builder: (context) => AdminLoginPage()));
+                                                        onPressed: ()  {
+                                                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                                                         })),
                                                 Container( child: Text("مشرف", style: TextStyle(fontSize: 30,fontWeight: FontWeight.w900)))
                                               ]))),
@@ -59,9 +53,7 @@ class Identity extends StatelessWidget {
                                                     decoration: BoxDecoration(color: AppTheme.backgroundColor,
                                                         shape: BoxShape.circle,
                                                         border: Border.all(color: AppTheme.textColor, width: 3)),
-                                                    child: MaterialButton(onPressed: () async {
-                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                      preferences.setString("identity",identity );
+                                                    child: MaterialButton(onPressed: (){
                                                       Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                                                       },
                                                         child: Image.asset('assets/images/student1.png'))),

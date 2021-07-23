@@ -17,7 +17,7 @@ class _Item1ScreenState extends State<Item1Screen> {
     var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
     var items= <Items>[];
 
-    if (response.body != null){
+    if (response.statusCode == 200){
       var dataJson= json.decode(response.body);
       for (var dataJson in dataJson){
         items.add(Items.fromJson(dataJson));
