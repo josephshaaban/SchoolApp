@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,9 @@ class _SelectSchoolState extends State<SelectSchool> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Material(
+    return new WillPopScope(
+        onWillPop: () =>  SystemNavigator.pop(),
+    child: Material(
         child: Container(
             child: Column(children: <Widget>[
               SizedBox(
@@ -90,6 +93,7 @@ class _SelectSchoolState extends State<SelectSchool> {
                                   painter: SecondWaveClipperBottom(),
                                 ))
                           ]))),
-            ])));
+            ])
+                          )));
   }
 }

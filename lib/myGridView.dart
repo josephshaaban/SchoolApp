@@ -1,10 +1,8 @@
 import 'dart:core';
-import 'package:hello_world1/conversation.dart';
 import 'main.dart';
 import 'item2.dart';
 import 'item3.dart';
 import 'item4.dart';
-import 'item1.dart';
 import 'item6.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,17 +15,13 @@ class MyGridView extends StatelessWidget {
           crossAxisCount: 2,
         children: <Widget>[
           MainObject(
-              myImage: Image.asset("assets/images/oo.png"),section:'الحضور والغياب',position: 0),
-          MainObject(
               myImage: Image.asset("assets/images/yy.png"),section:'آخر الأخبار',position: 1),
           MainObject(
               myImage: Image.asset("assets/images/cc.png"),section:'صندوق الإشعارات',position:2),
           MainObject(
               myImage: Image.asset("assets/images/ee.png"),section:'درجات الطالب',position:3),
           MainObject(
-              myImage: Image.asset("assets/images/ll.png"),section:'تواصل مع المشرف',position:4),
-          MainObject(
-              myImage: Image.asset("assets/images/rr.png"),section:'بنك الميديا',position:5)
+              myImage: Image.asset("assets/images/rr.png"),section:'بنك الميديا',position:4)
         ]);
   }
 }
@@ -39,10 +33,6 @@ class MainObject extends StatelessWidget {
 
   _getObjectItem(position, context){
     switch (position) {
-      case 0:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Item1Screen()));
-        break;
         case 1:
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => Item2Screen()));
@@ -55,11 +45,7 @@ class MainObject extends StatelessWidget {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => Item4Screen()));
               break;
-              case 4:
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Conversation()));
-                break;
-                case 5:
+                case 4:
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Item6Screen()));
                   break;

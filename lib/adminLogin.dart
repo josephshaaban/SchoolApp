@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'conversation.dart';
+import 'admin.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +52,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
               if ( key == email && value == password ){
                 SharedPreferences preferences = await SharedPreferences.getInstance();
                 preferences.setString("email",key );
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()));
               }}
         ));
 
@@ -168,7 +168,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                           SharedPreferences preferences = await SharedPreferences.getInstance();
                                           preferences.setString('email',emailController.text );
                                           preferences.setString('sIp', sIp);
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()),
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()),
                                           );
                                         } else{
                                           // set up the AlertDialog

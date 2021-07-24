@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:hello_world1/conversation.dart';
+import 'package:hello_world1/admin.dart';
 import 'package:hello_world1/item3.dart';
 import 'splashScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -95,7 +95,7 @@ void main() async {
           },
             debugShowCheckedModeBanner: true,
             home: MessageHandler(child:email == null ? SplashScreen() : email == 'admin@gmail.com'
-                ? Conversation()
+                ? AdminScreen()
                 : NewsScreen())));
   }
 
