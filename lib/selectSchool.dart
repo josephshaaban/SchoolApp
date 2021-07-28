@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
@@ -14,20 +16,33 @@ class SelectSchool extends StatefulWidget {
 class _SelectSchoolState extends State<SelectSchool> {
 
   String sName = '' ;
-  String sIp = '' ;
+  int school_Id;
+
+  School selectedUser;
+  List<School> _schools = <School>[];
+
+  Future<List<School>> fetchData() async{
+    var response =await http.get(Uri.parse('https://school-node-api.herokuapp.com/api/school'));
+    var _schools= <School>[];
+
+    if (response.statusCode == 200){
+      var dataJson= json.decode(response.body);
+      for (var dataJson in dataJson){
+        _schools.add(School.fromJson(dataJson));
+      }
+    }
+    return  _schools;
+  }
 
   @override
   void initState() {
+    fetchData().then((value) {
+      setState(() {
+        _schools.addAll(value);
+      });
+    });
     super.initState();
   }
-
-  School selectedUser;
-  List<School> schools = <School>[
-    const School('school1','ip 1'),
-    const School('school2','ip 2'),
-    const School('school3', 'ip 3'),
-    const School('school4', 'ip 4'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +75,7 @@ class _SelectSchoolState extends State<SelectSchool> {
                                       selectedUser = Value;
                                     });
                                   },
-                                  items: schools.map((School school) {
+                                  items: _schools.map((School school) {
                                     return DropdownMenuItem<School>(
                                       value: school,
                                       child: Row(
@@ -69,7 +84,7 @@ class _SelectSchoolState extends State<SelectSchool> {
                                             MaterialButton(
                                                 onPressed: () async{
                                                   SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                  preferences.setString('sIp',school.ip );
+                                                  preferences.setInt('school_Id',school.school_Id);
                                                   preferences.setString('sName', school.name);
                                                   Navigator.push(context,
                                                       MaterialPageRoute(builder: (context) => Identity()));

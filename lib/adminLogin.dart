@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:http/http.dart';
 import 'admin.dart';
+import 'data.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import "package:form_field_validator/form_field_validator.dart";
 import 'main.dart';
 import 'reusable.dart';
 
@@ -23,15 +24,20 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
   String email='';
   String password='';
-  String sName;
-  String sIp;
+  int school_Id ;
+  int student_id;
+  int teacher_id;
+  int classId;
+  String identity;
+  String identity1;
   Map saved_Logins1;
 
   Future getSchool() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      sName = preferences.getString ('sName');
-      sIp = preferences.getString('sIp');
+      school_Id = preferences.getInt('school_id');
+      identity= preferences.getString('identity');
+      identity1= preferences.getString('identity1');
     });
   }
 
@@ -48,8 +54,10 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
         logins.add(InkWell(child: Container(child: Text(key),) ,
             onTap: ()async{
               print(key + " "+ value);
-              email= 'admin@gmail.com'; password='adminadmin';
-              if ( key == email && value == password ){
+              SharedPreferences preferences = await SharedPreferences.getInstance();
+              String username = preferences.getString('email');
+              String userpassword = preferences.getString('password');
+              if ( key == username && value == userpassword ){
                 SharedPreferences preferences = await SharedPreferences.getInstance();
                 preferences.setString("email",key );
                 Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()));
@@ -127,7 +135,6 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                                   borderRadius: BorderRadius.circular(30.0)),
                                               hintStyle: TextStyle(fontSize: 20.0, color: AppTheme.textColor),
                                               hintText: 'البريد الالكتروني'),
-                                          validator: EmailValidator(errorText: 'Not a Valid Email'),
                                         ))),
                                 Padding(
                                     padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
@@ -139,12 +146,6 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                             obscureText: true,
                                             textAlign: TextAlign.right,
                                             controller: passwordController,
-                                            validator: (value){
-                                              if (value.length < 6 && value.length >0 ) {
-                                                return "Should Be At Least 6 characters" ;
-                                              } else {
-                                                return null;
-                                              }},
                                             decoration: InputDecoration(
                                                 focusedBorder: OutlineInputBorder(
                                                     borderSide: BorderSide(color: AppTheme.textColor)),
@@ -163,14 +164,28 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                       child: Text("تسجيل الدخول", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900, color: AppTheme.backgroundColor)
                                       ),
                                       onPressed: () async {
-                                        email='admin@gmail.com'; password='adminadmin';
-                                        if ( emailController.text == email && passwordController.text == password) {
+                                        final url = Uri.parse('https://rude-sheep-77.loca.lt/api/account/school_id');
+                                        final headers = {"Content-Type": "application/x-www-form-urlencoded"};
+                                        final response = await post(url, headers: headers,
+                                            body: jsonEncode(<String, String>{
+                                              'account': emailController.text,
+                                              'pass': passwordController.text})
+                                        );
+                                        if (response.statusCode == 200) {
+                                          print(response.body);
+                                          StudentData.fromJson(jsonDecode(response.body));
+                                          var jsonResponse = json.decode(response.body);
+                                          teacher_id = jsonResponse['teacher_id'];
                                           SharedPreferences preferences = await SharedPreferences.getInstance();
-                                          preferences.setString('email',emailController.text );
-                                          preferences.setString('sIp', sIp);
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => AdminScreen()),
+                                          preferences.setString('email', emailController.text);
+                                          preferences.setString('password', passwordController.text);
+                                          preferences.setInt('school_Id', school_Id);
+                                          preferences.setInt('teacher_id', teacher_id);
+                                          preferences.setInt('classId', classId);
+                                          Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => AdminScreen()),
                                           );
-                                        } else{
+                                        }else{
                                           // set up the AlertDialog
                                           AlertDialog alert = AlertDialog(content: Text("هذاالحساب ليس حساب مشرف",
                                             textAlign: TextAlign.center,)

@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'data.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import "package:form_field_validator/form_field_validator.dart";
 import 'news.dart';
 import 'main.dart';
 import 'reusable.dart';
@@ -18,13 +21,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  String email='';
-  String password='';
   String sName;
-  String sIp;
+  int school_Id ;
+ int student_id;
+  int classId;
   String identity;
   String identity1;
   Map saved_Logins;
@@ -33,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       sName = preferences.getString ('sName');
-      sIp = preferences.getString('sIp');
+      school_Id = preferences.getInt('school_Id')??0;
       identity= preferences.getString('identity');
       identity1= preferences.getString('identity1');
     });
@@ -53,12 +57,14 @@ class _LoginPageState extends State<LoginPage> {
         logins.add(InkWell(child: Container(child: Text(key),) ,
           onTap: ()async{
             print(key + " "+ value);
-            email='user@gmail.com'; password='useruser';
-            if ( key == email && value == password) {
+            SharedPreferences preferences = await SharedPreferences.getInstance();
+            String username=  preferences.getString('email');
+            String userpassword=  preferences.getString('password');
+            print(username);
+            print(userpassword);
+            if (value==userpassword) {
               SharedPreferences preferences = await SharedPreferences.getInstance();
               preferences.setString('email',key );
-              preferences.setString('sName', sName);
-              preferences.setString('sIp', sIp);
               Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
               );
             }
@@ -76,7 +82,9 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     init_data();
+    getSchool();
   }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -133,7 +141,6 @@ class _LoginPageState extends State<LoginPage> {
                                                   borderRadius: BorderRadius.circular(30.0)),
                                               hintStyle: TextStyle(fontSize: 20.0, color: AppTheme.textColor),
                                               hintText: 'البريد الالكتروني'),
-                                          validator: EmailValidator(errorText: 'Not a Valid Email'),
                                         ))),
                                 Padding(
                                     padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
@@ -169,26 +176,42 @@ class _LoginPageState extends State<LoginPage> {
                                       child: Text("تسجيل الدخول", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900, color: AppTheme.backgroundColor)
                                       ),
                                       onPressed: () async {
-                                        email='user@gmail.com'; password='useruser';
-                                        if ( emailController.text == email && passwordController.text == password) {
+                                      //  email='user@gmail.com'; password='useruser';
+                                        //if ( emailController.text == email && passwordController.text == password) {
+                                        final url = Uri.parse('https://school-node-api.herokuapp.com/api/account/$school_Id/auth');
+                                        final headers = {
+                                          'Content-Type': 'application/json;charset=UTF-8',
+                                          'Charset': 'utf-8'
+                                        };
+                                        final response = await post(url, headers: headers,
+                                            body: jsonEncode(<String, String>{
+                                              'account': emailController.text,
+                                              'pass': passwordController.text})
+                                        );
+                                        if (response.statusCode == 200) {
+                                          print(response.body);
+                                          var jsonResponse = json.decode(response.body);
+                                          List<StudentData> posts = List<StudentData>.from(jsonResponse.map((model)=> StudentData.fromJson(model)));
+                                        student_id=  posts[0].student_id;
+                                         classId= posts[0].classId;
+                                         print(student_id);
+                                         print(classId);
+                                         print(emailController.text);
+                                         print(passwordController.text);
                                           SharedPreferences preferences = await SharedPreferences.getInstance();
-                                          preferences.setString('email',emailController.text );
-                                          preferences.setString('sName', sName);
-                                          preferences.setString('sIp', sIp);
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),
+                                          preferences.setString('email', emailController.text);
+                                          preferences.setString('password', passwordController.text);
+                                          preferences.setInt('school_Id', school_Id);
+                                          preferences.setInt('student_id', student_id);
+                                          preferences.setInt('classId', classId);
+                                          StudentData.fromJson(jsonResponse[0]);
+                                          print(posts);
+                                          Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => NewsScreen()),
                                           );
-                                        } else{
-                                          // set up the AlertDialog
-                                          AlertDialog alert = AlertDialog(content: Text("هذاالحساب ليس حساب طالب",
-                                            textAlign: TextAlign.center,)
-                                          );
-                                          // show the dialog
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return alert;
-                                            },
-                                          );
+                                        }
+                                        else {
+                                          print(response.reasonPhrase);
                                         }
                                         SharedPreferences preferences = await SharedPreferences.getInstance();
                                         Map m;

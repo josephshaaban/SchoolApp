@@ -17,29 +17,35 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScreen>{
-  List<Data> _news = <Data>[];
+  List<Ads> _ads = <Ads>[];
 
-  Future<List<Data>> fetchData() async{
-    var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts/1/comments'));
-    var news= <Data>[];
+  Future<List<Ads>> fetchData() async{
+    var response =await http.get(Uri.parse('https://school-node-api.herokuapp.com/api/ads'));
+    var ads= <Ads>[];
 
     if (response.body != null ){
       var dataJson= json.decode(response.body);
       for (var dataJson in dataJson){
-        news.add(Data.fromJson(dataJson));
+        ads.add(Ads.fromJson(dataJson));
       }
     }
-    return news;
+    return ads;
   }
 
-  String email= "";
+  String email= '';
   String sName = '';
+  int school_Id ;
+  int student_id;
+  int classId;
 
-  Future getEmail() async{
+  Future getStudentData() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       email = preferences.getString ('email');
       sName= preferences.getString('sName');
+      school_Id = preferences.getInt('school_Id')??0;
+      student_id=  preferences.getInt('student_id')??0;
+      classId=  preferences.getInt('classId')??0;
     });
   }
 
@@ -47,11 +53,11 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
   void initState(){
     fetchData().then((value) {
       setState(() {
-        _news.addAll(value);
+        _ads.addAll(value);
       });
     });
     super.initState();
-    getEmail();
+    getStudentData();
   }
 
   @override
@@ -92,7 +98,7 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
                                                 color: AppTheme.textColor,
                                                 child: Column(
                                                     children: <Widget>[
-                                                      Text(sName??'' , style: TextStyle(
+                                                      Text(sName , style: TextStyle(
                                                           fontSize: 30,fontWeight: FontWeight.w900,
                                                           color: AppTheme.backgroundColor.withOpacity(1.0))),
                                                       Text(email??'', textAlign: TextAlign.center, style: TextStyle(
@@ -118,25 +124,40 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
   @override
   void afterFirstLayout(BuildContext context) {
     showAlertDialog();
+    fetchData();
   }
-
   Future showAlertDialog() async{
-    var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
-    var news= <Data>[];
-
-    if (response.body != null){
-      var dataJson= json.decode(response.body);
-      for (var dataJson in dataJson){
-        news.add(Data.fromJson(dataJson));
-      }
       return showDialog(
         context: context,
         builder: (context) => new AlertDialog(
-          content: ListView.builder(
-            itemBuilder: (context, index) {
-              return Text(_news[index].body);
+          content: FutureBuilder(
+            future: fetchData() ,
+            builder: (context, snapshot1) {
+              if (snapshot1.hasData) {
+                return ListView.builder(itemBuilder: (context,index) {
+                  Ads ad = snapshot1.data[index];
+                  Ads ad1 = snapshot1.data[1];
+                    return Column(
+                        children: [
+                          Card(
+                              color: Colors.white60,
+                              child: Column(
+                                  children: [
+                                    Padding(
+                                        padding: EdgeInsets.only(bottom: 15)),
+                                    Text(ad.adsText),
+                                    Image.network(ad1.adsImg)
+                                  ])),
+                        ]);
+                  },
+                  itemCount: snapshot1.data.length,
+                );
+              }
+              else{
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              }
             },
-            itemCount: _news.length,
           ),
           actions: <Widget>[
             MaterialButton(
@@ -148,5 +169,4 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
         ),
       );
     }
-  }
 }
