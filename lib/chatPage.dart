@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
 import 'package:uuid/uuid.dart';
 
@@ -64,10 +65,34 @@ class _ChatPageState extends State<ChatPage> {
         .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
         .toList();
 
+    final sharedMessages = await SharedPreferences.getInstance();
+    final key = 'saved_messages';
+
+    Map decodeOptions = jsonDecode(response);
+    String savedMessages = jsonEncode(types.Message.fromJson(decodeOptions));
+    sharedMessages.setString(key, savedMessages);
+
+    // final savedMessages = jsonDecode(response);
+    // sharedMessages.setStringList(key, savedMessages);
+    print('saved $savedMessages');
+
     setState(() {
       _messages = messages;
     });
   }
+
+  // void _loadLocallyMessages() async{
+  //   SharedPreferences sharedMessages = await SharedPreferences.getInstance();
+  //   Map messagesMap = jsonDecode(sharedMessages.getString('saved_messages'));
+  //   var messages = types.Message.fromJson(messagesMap);
+  //   // var messages = (jsonDecode(response) as List)
+  //   //     .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
+  //   //     .toList();
+  //
+  //   setState(() {
+  //     _messages = messages;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

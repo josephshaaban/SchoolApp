@@ -47,5 +47,6 @@ class ChatUsers{
   String name;
   String messageText;
   String image;
-  ChatUsers({@required this.name,@required this.messageText,@required this.image});
+  List<String> history;
+  ChatUsers({@required this.name,@required this.messageText,@required this.image, List<String> history});
 }
