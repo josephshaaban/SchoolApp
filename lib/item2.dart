@@ -16,31 +16,18 @@ class _Item2ScreenState extends State<Item2Screen> {
   int school_Id;
   int student_id;
   int classId;
-  List<ExamData> _exam = <ExamData>[];
-  List<ExamData> _items = <ExamData>[];
+  List<News> _news = <News>[];
 
-  Future<List<ExamData>> fetchData() async{
-    var response =await http.get(Uri.parse('https://school-node-api.herokuapp.com/api/exam/$student_id'));
-    var items= <ExamData>[];
+  Future<List<News>> fetchData() async{
+    var response =await http.get(Uri.parse('https://school-node-api.herokuapp.com/api/news/$school_Id'));
+    var news= <News>[];
     if (response.statusCode == 200 ){
       var dataJson= json.decode(response.body);
       for (var dataJson in dataJson){
-        items.add(ExamData.fromJson(dataJson));
+        news.add(News.fromJson(dataJson));
       }
     }
-    return items;
-  }
-
-  Future<List<ExamData>> fetchData1() async{
-    var response1 =await http.get(Uri.parse('https://school-node-api.herokuapp.com/api/exam/$student_id'));
-    var exam= <ExamData>[];
-    if( response1.statusCode==200){
-      var dataJson1 = json.decode(response1.body);
-      for(var dataJson1 in dataJson1){
-        exam.add(ExamData.fromJson(dataJson1));
-      }
-    }
-    return exam;
+    return news;
   }
 
   Future getStudentData() async{
@@ -56,38 +43,46 @@ class _Item2ScreenState extends State<Item2Screen> {
   void initState(){
     fetchData().then((value) {
       setState(() {
-        _items.addAll(value);
+        _news.addAll(value);
       });
     });
     super.initState();
     getStudentData();
-    fetchData1().then((value){
+    fetchData().then((value){
       setState(() {
-        _exam.addAll(value);
+        _news.addAll(value);
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar:ReusableWidgets.getAppBar('آخر الأخبار'),
-        body:Column(
-      children:[
-        Expanded(child: FutureBuilder(
+        body:FutureBuilder(
           future: fetchData() ,
           builder: (context, snapshot1) {
             if (snapshot1.hasData) {
               return ListView.builder(itemBuilder: (context,index){
-                ExamData myproject = snapshot1.data[index];
-                return Container(
-                    child:   Column(
-                        children:[
-                          Text(myproject.examMaterial),
-                          Text(myproject.examClassroom),
-                          Text(myproject.examNote),
-                          Text(myproject.examDate)
-                       ]));
+                News newsproject = snapshot1.data[index];
+                return Card(
+                  child: Container(
+                    alignment: Alignment.topLeft,
+                    decoration: BoxDecoration(color: Colors.grey.shade200 ),
+                  child:Column(
+                  children: [
+                    Card(
+                       child: Container(
+                          alignment: Alignment.topLeft,
+                          decoration: BoxDecoration(color: Colors.grey.shade200 ),
+                            child:Column( children: [
+                            Padding(padding: EdgeInsets.only(top: 15,bottom: 15),
+                           child:Text('News: '+newsproject.news)),
+                          Container(padding: EdgeInsets.only(bottom: 15),
+                              alignment: Alignment.topLeft,
+                              child:Text('Link: '+newsproject.link)),
+                            ])))])));
               },
                   itemCount: snapshot1.data.length
               );
@@ -97,56 +92,8 @@ class _Item2ScreenState extends State<Item2Screen> {
             return const CircularProgressIndicator();
             }
           },
-        )),
-        Expanded(child:FutureBuilder(
-         future: fetchData() ,
-          builder: (context, snapshot1) {
-         if (snapshot1.hasData) {
-          return ListView.builder(itemBuilder: (context,index){
-            ExamData myproject = snapshot1.data[index];
-            return Container(
-                child:   Column(
-                    children:[
-                      Text(myproject.examMaterial),
-                      Text(myproject.examClassroom),
-                      Text(myproject.examNote),
-                      Text(myproject.examDate)
-                    ]));
-            },
-              itemCount: snapshot1.data.length
-          );
-        }
-        else{
-        // By default, show a loading spinner.
-          return const CircularProgressIndicator();
-        }
-        },
-       )),
-        Expanded(child:FutureBuilder(
-          future: fetchData() ,
-          builder: (context, snapshot1) {
-            if (snapshot1.hasData) {
-              return ListView.builder(itemBuilder: (context,index){
-                ExamData myproject = snapshot1.data[index];
-                return Card(
-                    child:   Column(
-                        children:[
-                          Text(myproject.examMaterial),
-                          Text(myproject.examClassroom),
-                          Text(myproject.examNote),
-                          Text(myproject.examDate)
-                        ]));
-              },
-                  itemCount: snapshot1.data.length
-              );
-            }
-            else{
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            }
-          },
-        ))
-      ]));
+        ),
+      );
   }
 }
 

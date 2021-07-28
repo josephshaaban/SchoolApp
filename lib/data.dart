@@ -40,12 +40,6 @@ class MediaData{
     fileUrl= json['fileUrl'];
   }
 }
-class Todo {
-  final String filename;
-  final String fileurl ;
-
-  const Todo(this.filename, this.fileurl);
-}
 
 class Ads{
   String adsText;
@@ -54,6 +48,16 @@ class Ads{
   Ads.fromJson(Map<String, dynamic> json){
     adsText= json['adsText'];
     adsImg= json['adsImg'];
+  }
+}
+
+class News{
+  String news;
+  String link;
+  News(this.news, this.link);
+  News.fromJson(Map<String, dynamic> json){
+    news= json['news'];
+    link= json['link'];
   }
 }
 
