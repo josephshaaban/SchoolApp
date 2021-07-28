@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:web_socket_channel/io.dart';
 import 'reusable.dart';
-import 'package:uuid/uuid.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({key}) : super(key: key);
@@ -15,16 +15,68 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+
+  IOWebSocketChannel channel; //channel varaible for websocket
+  bool connected; // boolean value to track connection status
+
+  String myid = "0"; //my id
+  // swap myid and recieverid value on another mobile to test send and recieve
+
   List<types.Message> _messages = [];
-  final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c',
+  final _user = const types.User(
+      id: '1',
       imageUrl: "assets/images/account.png",
       firstName: "UserName"
   );
 
   @override
   void initState() {
+    connected= false;
     super.initState();
     _loadMessages();
+    channelconnect();
+  }
+
+  channelconnect(){ //function to connect
+    try{
+      channel = IOWebSocketChannel.connect("https://school-node-chat.herokuapp.com/$myid"); //channel IP : Port
+      channel.stream.listen((message) {
+        print(message);
+        setState(() {
+          if(message == "connected"){
+            connected = true;
+            setState(() { });
+            print("Connection establised.");
+          }else if(message == "send:success"){
+            print("Message send success");
+            setState(() {
+
+            });
+          }else if(message == "send:error"){
+            print("Message send error");
+          }else if (message.substring(0, 6) == "{'cmd'") {
+            print("Message data");
+            message = message.replaceAll(RegExp("'"), '"');
+            _addMessage(message);
+            setState(() { //update UI after adding data to message model
+
+            });
+          }
+        });
+      },
+        onDone: () {
+          //if WebSocket is disconnected
+          print("Web socket is closed");
+          setState(() {
+            connected = false;
+          });
+        },
+        onError: (error) {
+          print(error.toString());
+        },);
+    }catch (_){
+      print("error on connecting to websocket.");
+    }
   }
 
   void _addMessage(types.Message message) {
@@ -33,30 +85,25 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-  void _handlePreviewDataFetched(
-      types.TextMessage message,
-      types.PreviewData previewData,
-      ) {
-    final index = _messages.indexWhere((element) => element.id == message.id);
-    final updatedMessage = _messages[index].copyWith(previewData: previewData);
-
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      setState(() {
-        _messages[index] = updatedMessage;
-      });
-    });
-  }
-
   void _handleSendPressed(types.PartialText message) {
-    final textMessage = types.TextMessage(
-      author: _user,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: const Uuid().v4(),
-      text: message.text,
-    );
+    if (connected= true) {
+      final textMessage = types.TextMessage(
+        author: _user,
+        createdAt: DateTime
+            .now()
+            .millisecondsSinceEpoch,
+        id: myid,
+        text: message.text,
+      );
+      _addMessage(textMessage);
+      channel.sink.add(textMessage); //send message to reciever channel
+    }
+    else{
+      channelconnect();
+      print("Websocket is not connected.");
+    }
+    }
 
-    _addMessage(textMessage);
-  }
 
   void _loadMessages() async {
     final response = await rootBundle.loadString('assets/messages.json');
@@ -80,7 +127,7 @@ class _ChatPageState extends State<ChatPage> {
               secondaryColor: Colors.blueGrey
           ),
           messages: _messages,
-          onPreviewDataFetched: _handlePreviewDataFetched,
+          usePreviewData: true,
           onSendPressed: _handleSendPressed,
           user: _user,
           showUserAvatars: true,

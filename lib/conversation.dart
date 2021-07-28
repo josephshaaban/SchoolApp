@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:hello_world1/chatPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'reusable.dart';
 import 'chatPage.dart';
 import 'main.dart';
@@ -149,10 +150,11 @@ class _ConversationState extends State<Conversation> {
 }
 
 class ConversationList extends StatefulWidget{
+  final types.Message message;
   final String name;
   final String messageText;
   final String imageUrl;
-  ConversationList({@required this.name,@required this.messageText,@required this.imageUrl});
+  ConversationList({@required this.name,@required this.messageText,@required this.imageUrl, @required this.message});
 
   @override
   _ConversationListState createState() => _ConversationListState();

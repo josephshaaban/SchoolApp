@@ -1,0 +1,9 @@
+{
+  "author": {
+    "id": "authorId",
+    "imageUrl": "imageUrl",
+    "firstName": "firstName"
+  },
+  "id": "id",
+  "text": "text"
+}
