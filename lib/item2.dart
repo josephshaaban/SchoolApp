@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
 import 'package:flutter/material.dart';
 import 'data.dart';
 import 'package:http/http.dart' as http;
-
 
 class Item2Screen extends StatefulWidget {
   @override
@@ -12,41 +12,88 @@ class Item2Screen extends StatefulWidget {
 }
 
 class _Item2ScreenState extends State<Item2Screen> {
-  List<Items> _items = <Items>[];
 
-  Future<List<Items>> fetchData() async{
-    var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
-    var items= <Items>[];
+  int school_Id;
+  int student_id;
+  int classId;
+  List<News> _news = <News>[];
 
-    if (response.statusCode == 200){
+  Future<List<News>> fetchData() async{
+    var response =await http.get(Uri.parse('https://school-node-api.herokuapp.com/api/news/$school_Id'));
+    var news= <News>[];
+    if (response.statusCode == 200 ){
       var dataJson= json.decode(response.body);
       for (var dataJson in dataJson){
-        items.add(Items.fromJson(dataJson));
+        news.add(News.fromJson(dataJson));
       }
     }
-    return  items;
+    return news;
+  }
+
+  Future getStudentData() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      school_Id = preferences.getInt('school_Id')??0;
+      student_id=  preferences.getInt('student_id')??0;
+      classId= preferences.getInt('classId')??0;
+    });
   }
 
   @override
   void initState(){
     fetchData().then((value) {
       setState(() {
-        _items.addAll(value);
+        _news.addAll(value);
       });
     });
     super.initState();
+    getStudentData();
+    fetchData().then((value){
+      setState(() {
+        _news.addAll(value);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar:ReusableWidgets.getAppBar('آخر الأخبار'),
-        body: ListView.builder(
-          itemBuilder: (context, index){
-            return ReusableWidgets.getCard(_items[index].name,_items[index].email,_items[index].username);
+        body:FutureBuilder(
+          future: fetchData() ,
+          builder: (context, snapshot1) {
+            if (snapshot1.hasData) {
+              return ListView.builder(itemBuilder: (context,index){
+                News newsproject = snapshot1.data[index];
+                return Card(
+                  child: Container(
+                    alignment: Alignment.topLeft,
+                    decoration: BoxDecoration(color: Colors.grey.shade200 ),
+                  child:Column(
+                  children: [
+                    Card(
+                       child: Container(
+                          alignment: Alignment.topLeft,
+                          decoration: BoxDecoration(color: Colors.grey.shade200 ),
+                            child:Column( children: [
+                            Padding(padding: EdgeInsets.only(top: 15,bottom: 15),
+                           child:Text('News: '+newsproject.news)),
+                          Container(padding: EdgeInsets.only(bottom: 15),
+                              alignment: Alignment.topLeft,
+                              child:Text('Link: '+newsproject.link)),
+                            ])))])));
+              },
+                  itemCount: snapshot1.data.length
+              );
+            }
+            else{
+            // By default, show a loading spinner.
+            return const CircularProgressIndicator();
+            }
           },
-          itemCount: _items.length,
-        ));
+        ),
+      );
   }
 }
 

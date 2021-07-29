@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:hello_world1/conversation.dart';
 import 'package:hello_world1/item3.dart';
 import 'splashScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 
 class MessageHandler extends StatefulWidget {
   final Widget child;
@@ -94,8 +92,7 @@ void main() async {
             '/notification':(context) => Item3Screen()
           },
             debugShowCheckedModeBanner: true,
-            home: MessageHandler(child:email == null ? SplashScreen() : email == 'admin@gmail.com'
-                ? Conversation()
+            home: MessageHandler(child:email == null ? SplashScreen()
                 : NewsScreen())));
   }
 

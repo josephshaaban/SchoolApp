@@ -1,9 +1,7 @@
-//import 'dart:convert';
 import 'dart:core';
-import 'reusable.dart';
 import 'package:flutter/material.dart';
-//import 'data.dart';
-//import 'package:http/http.dart' as http;
+import 'package:hello_world1/reusable.dart';
+
 
 class Item3Screen extends StatelessWidget {
 
@@ -13,12 +11,21 @@ class Item3Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:ReusableWidgets.getAppBar('صندوق الإشعارات'),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            return Text(payload ?? '');
+        appBar:ReusableWidgets.getAppBar(' صندوق الإشعارات '),
+        body: ListView.builder(itemBuilder: (context, index) {
+          return Card(
+              borderOnForeground: true,
+              color: Colors.white60,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                  children: <Widget>[
+                    Padding(padding: EdgeInsets.only(top: 10),
+                      child: Text(payload ?? 'payload'),)
+                  ]));
           },
-          itemCount: 10,
-        ));
+        itemCount: 10
+    ));
   }
 }

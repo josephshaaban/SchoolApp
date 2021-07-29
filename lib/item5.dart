@@ -2,12 +2,13 @@ import 'dart:core';
 import 'reusable.dart';
 import 'package:flutter/material.dart';
 
-class AdminLoginPage extends StatefulWidget {
+class Item5Screen extends StatefulWidget {
   @override
-  _AdminLoginPageState createState() => _AdminLoginPageState();
+  _Item5ScreenState createState() => _Item5ScreenState();
 }
 
-class _AdminLoginPageState extends State<AdminLoginPage> {
+class _Item5ScreenState extends State<Item5Screen> {
+
   @override
   void initState(){
     super.initState();
@@ -16,9 +17,12 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:ReusableWidgets.getAppBar(' تسجيل الدخول كمشرف'),
+        appBar:ReusableWidgets.getAppBar('التواصل مع المشرف'),
         body: Center(
             child: Text('الرجاء الترقية الى النسخة المدفوعة',style: TextStyle(fontWeight: FontWeight.w900),))
     );
   }
 }
+
+
+
