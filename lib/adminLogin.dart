@@ -1,13 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
-import 'conversation.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'data.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import "package:form_field_validator/form_field_validator.dart";
+import 'news.dart';
 import 'main.dart';
 import 'reusable.dart';
+import 'conversation.dart';
 
 class AdminLoginPage extends StatefulWidget {
 
@@ -18,38 +22,55 @@ class AdminLoginPage extends StatefulWidget {
 class _AdminLoginPageState extends State<AdminLoginPage> {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  String email='';
-  String password='';
-  Map saved_Logins1;
+  String sName;
+  int school_Id ;
+  int student_id;
+  int classId;
+  String identity;
+  String identity1;
+  Map saved_Logins;
+
+  Future getSchool() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      sName = preferences.getString ('sName');
+      identity= preferences.getString('identity');
+      identity1= preferences.getString('identity1');
+    });
+  }
 
   void init_data()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    print(preferences.getString('saved_login1'));
-    preferences.getString('saved_login1')!=null?setState((){saved_Logins1 = jsonDecode(preferences.getString('saved_login1'));}) :setState((){saved_Logins1=Map();});
+    print(preferences.getString('saved_login'));
+    preferences.getString('saved_login')!=null?setState((){saved_Logins = jsonDecode(preferences.getString('saved_login'));}) :setState((){saved_Logins=Map();});
+    getSchool();
   }
   // loader will find all logged in account in this device then add them to widget array then put them in a column to display them
-  Widget loader1(){
-    if(saved_Logins1!=null){
+  Widget loader2(){
+    if(saved_Logins!=null){
       List<Widget> logins=[];
-      saved_Logins1.forEach((key, value) {
+      saved_Logins.forEach((key, value) {
         logins.add(InkWell(child: Container(child: Text(key),) ,
-            onTap: ()async{
-              print(key + " "+ value);
-              email= 'admin@gmail.com'; password='adminadmin';
-              if ( key == email && value == password ){
-                SharedPreferences preferences = await SharedPreferences.getInstance();
-                preferences.setString("email",key );
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
-              }}
+          onTap: ()async{
+            print(key + " "+ value);
+            SharedPreferences preferences = await SharedPreferences.getInstance();
+            String username=  preferences.getString('teacherEmail');
+            String userpassword=  preferences.getString('teacherPassword');
+            if ( key == username && value == userpassword ){
+              SharedPreferences preferences = await SharedPreferences.getInstance();
+              preferences.setString("teacherEmail",key );
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()));
+            }}
         ));
 
       });
       return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: logins);
+        mainAxisSize: MainAxisSize.min,
+        children: logins,);
     }
     else {
       return CircularProgressIndicator(color: Colors.blue,);
@@ -59,11 +80,13 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   void initState() {
     super.initState();
     init_data();
+    getSchool();
   }
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;  return Scaffold(
+    final Size size = MediaQuery.of(context).size;
+    return Scaffold(
         body:  Container(
             child:Column(
                 mainAxisSize: MainAxisSize.min,
@@ -105,6 +128,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                     child: Directionality(
                                         textDirection: TextDirection.ltr,
                                         child: TextFormField(
+                                          key: _formKey1,
                                           autovalidateMode: AutovalidateMode.always,
                                           textAlign: TextAlign.right,
                                           controller: emailController,
@@ -116,7 +140,6 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                                   borderRadius: BorderRadius.circular(30.0)),
                                               hintStyle: TextStyle(fontSize: 20.0, color: AppTheme.textColor),
                                               hintText: 'البريد الالكتروني'),
-                                          validator: EmailValidator(errorText: 'Not a Valid Email'),
                                         ))),
                                 Padding(
                                     padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
@@ -152,30 +175,46 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                       child: Text("تسجيل الدخول", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900, color: AppTheme.backgroundColor)
                                       ),
                                       onPressed: () async {
-                                        email='admin@gmail.com'; password='adminadmin';
-                                        if ( emailController.text == email && passwordController.text == password) {
+                                        //  email='user@gmail.com'; password='useruser';
+                                        //if ( emailController.text == email && passwordController.text == password) {
+                                        final url = Uri.parse('https://school-node-api.herokuapp.com/api/teacheraccount/1/auth');
+                                        final headers = {
+                                          'Content-Type': 'application/json;charset=UTF-8',
+                                          'Charset': 'utf-8'
+                                        };
+                                        final response = await post(url, headers: headers,
+                                            body: jsonEncode(<String, String>{
+                                              'account': emailController.text,
+                                              'pass': passwordController.text})
+                                        );
+                                        if (response.statusCode == 200) {
+                                          print(response.body);
+                                          var jsonResponse = json.decode(response.body);
+                                          List<TeacherData> posts = List<TeacherData>.from(jsonResponse.map((model)=> TeacherData.fromJson(model)));
+                                          // student_id=  posts[0].student_id;
+                                          //classId= posts[0].classId;
+                                          //print(student_id);
+                                          // print(classId);
+                                          print(emailController.text);
+                                          print(passwordController.text);
                                           SharedPreferences preferences = await SharedPreferences.getInstance();
-                                          preferences.setString('email',emailController.text );
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => Conversation()),
+                                          preferences.setString('teacherEmail', emailController.text);
+                                          preferences.setString('teacherPassword', passwordController.text);
+                                          // preferences.setInt('classId', classId);
+                                          TeacherData.fromJson(jsonResponse[0]);
+                                          print(posts);
+                                          Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => Conversation()),
                                           );
-                                        } else{
-                                          // set up the AlertDialog
-                                          AlertDialog alert = AlertDialog(content: Text("هذاالحساب ليس حساب مشرف",
-                                            textAlign: TextAlign.center,)
-                                          );
-                                          // show the dialog
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return alert;
-                                            },
-                                          );
+                                        }
+                                        else {
+                                          print(response.reasonPhrase);
                                         }
                                         SharedPreferences preferences = await SharedPreferences.getInstance();
                                         Map m;
-                                        preferences.getString('saved_login1')!=null?m = jsonDecode(preferences.getString('saved_login1')):m=Map<String,String>();
+                                        preferences.getString('saved_login')!=null?m = jsonDecode(preferences.getString('saved_login')):m=Map<String,String>();
                                         m[emailController.text.toLowerCase().trim()]=passwordController.text;
-                                        preferences.setString('saved_login1', jsonEncode(m));
+                                        preferences.setString('saved_login', jsonEncode(m));
                                       },
                                     )),
                                 MaterialButton(
@@ -187,7 +226,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                     onPressed: () async {
                                       showDialog(context: context, builder:(context){
                                         return AlertDialog(
-                                          content: loader1(),
+                                          content: loader2(),
                                           actions: [
                                             MaterialButton(
                                               onPressed: () {

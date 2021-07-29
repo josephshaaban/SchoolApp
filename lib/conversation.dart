@@ -30,7 +30,7 @@ class _ConversationState extends State<Conversation> {
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Philip Fox",
-      messageText: "Busy! Call me in 20 mins",
+        messageText: "Busy! Call me in 20 mins",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Debra Hawkins",
@@ -42,11 +42,11 @@ class _ConversationState extends State<Conversation> {
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "Andrey Jones",
-      messageText: "Can you please share the file?",
+        messageText: "Can you please share the file?",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "John Wick",
-      messageText: "How are you?"
+        messageText: "How are you?"
     ),
   ];
 
@@ -69,55 +69,55 @@ class _ConversationState extends State<Conversation> {
   Widget build(BuildContext context) {
     return new WillPopScope(
         onWillPop: () =>  SystemNavigator.pop(),
-    child: Scaffold(
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SafeArea(
-              child: Padding(
-                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("Conversations", style: TextStyle(
-                        fontSize: 32, fontWeight: FontWeight.bold,color: AppTheme.textColor)),
-                    _addNewConversation(),
-                  ],
+        child: Scaffold(
+          body: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("Conversations", style: TextStyle(
+                            fontSize: 32, fontWeight: FontWeight.bold,color: AppTheme.textColor)),
+                        _addNewConversation(),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                ListView.builder(
+                    itemCount: chatUsers.length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(top: 16),
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      if (chatUsers[index].image==null) {
+                        return ConversationList(
+                          name: chatUsers[index].name,
+                          messageText: chatUsers[index].messageText,
+                          imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
+                          ,
+                        );
+                      }
+                      else{
+                        return ConversationList(
+                            name: chatUsers[index].name,
+                            messageText: chatUsers[index].messageText,
+                            imageUrl: chatUsers[index].image
+                        );
+                      }
+                    }
+                ),
+              ],
             ),
-            ListView.builder(
-              itemCount: chatUsers.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16),
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                if (chatUsers[index].image==null) {
-                  return ConversationList(
-                      name: chatUsers[index].name,
-                      messageText: chatUsers[index].messageText,
-                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
-                    ,
-                  );
-                }
-                else{
-                  return ConversationList(
-                      name: chatUsers[index].name,
-                      messageText: chatUsers[index].messageText,
-                      imageUrl: chatUsers[index].image
-                  );
-                }
-              }
-            ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
   Widget _addNewConversation()   {
-    if (email == "user@gmail.com") {
+    if (email !=null) {
       return Container(
           padding: EdgeInsets.only(left: 0, right: 5, top: 2, bottom: 2),
           height: 30,
@@ -125,15 +125,15 @@ class _ConversationState extends State<Conversation> {
             borderRadius: BorderRadius.circular(30),
             color: Colors.pink[50],),
           child: MaterialButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => TeachersList()));
-                      },
-                  child:Row(children:[
-                   Icon(Icons.add),
-                    Text("Add New", style: TextStyle(fontSize: 14,
-                            fontWeight: FontWeight.bold, color: AppTheme.textColor))
-                 ])));
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TeachersList()));
+              },
+              child:Row(children:[
+                Icon(Icons.add),
+                Text("Add New", style: TextStyle(fontSize: 14,
+                    fontWeight: FontWeight.bold, color: AppTheme.textColor))
+              ])));
     } else {
       return Container(
           padding: EdgeInsets.only(
