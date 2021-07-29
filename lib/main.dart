@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:hello_world1/admin.dart';
 import 'package:hello_world1/item3.dart';
 import 'splashScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -93,8 +92,7 @@ void main() async {
             '/notification':(context) => Item3Screen()
           },
             debugShowCheckedModeBanner: true,
-            home: MessageHandler(child:email == null ? SplashScreen() : email == 'admin@gmail.com'
-                ? AdminScreen()
+            home: MessageHandler(child:email == null ? SplashScreen()
                 : NewsScreen())));
   }
 
