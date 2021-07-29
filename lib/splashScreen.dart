@@ -11,6 +11,7 @@ import 'main.dart';
 import 'reusable.dart';
 import 'myAnimation.dart';
 
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
