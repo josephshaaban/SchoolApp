@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:hello_world1/conversation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
 import 'item2.dart';
 import 'item3.dart';
@@ -9,7 +10,32 @@ import 'item6.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class MyGridView extends StatelessWidget {
+class MyGridView extends StatefulWidget {
+  @override
+  _MyGridViewState createState() => _MyGridViewState();
+}
+
+class _MyGridViewState extends State<MyGridView> {
+
+  int school_Id;
+  int student_id;
+  int classId;
+
+  Future getStudentData() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      school_Id = preferences.getInt('school_Id')??0;
+      student_id=  preferences.getInt('student_id')??0;
+      classId= preferences.getInt('classId')??0;
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    getStudentData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GridView.count(

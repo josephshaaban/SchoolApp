@@ -117,7 +117,7 @@ class _ConversationState extends State<Conversation> {
     ));
   }
   Widget _addNewConversation()   {
-    if (email == "user@gmail.com") {
+    if (email !=null ) {
       return Container(
           padding: EdgeInsets.only(left: 0, right: 5, top: 2, bottom: 2),
           height: 30,

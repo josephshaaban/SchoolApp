@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
 import 'package:flutter/material.dart';
 import 'data.dart';
 import 'package:http/http.dart' as http;
-
 
 class Item6Screen extends StatefulWidget {
   @override
@@ -12,42 +12,79 @@ class Item6Screen extends StatefulWidget {
 }
 
 class _Item6ScreenState extends State<Item6Screen> {
-  List<ItemData> _items = <ItemData>[];
+  int student_id;
+  int classId;
 
-  Future<List<ItemData>> fetchData() async{
-    var response =await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1/photos'));
-    var items= <ItemData>[];
+  List<MediaData> _media = <MediaData>[];
 
-    if (response.statusCode == 200){
-      var dataJson= json.decode(response.body);
-      for (var dataJson in dataJson){
-        items.add(ItemData.fromJson(dataJson));
+  Future getStudentData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      student_id = preferences.getInt('student_id') ?? 0;
+      classId = preferences.getInt('classId') ?? 0;
+    });
+  }
+
+  Future<List<MediaData>> fetchData() async {
+    var response = await http.get(Uri.parse(
+        'https://school-node-api.herokuapp.com/api/userid/$student_id'));
+
+    var media = <MediaData>[];
+
+    if (response.body.isNotEmpty) {
+      print(student_id);
+      var dataJson = json.decode(response.body);
+      for (var dataJson in dataJson) {
+        media.add(MediaData.fromJson(dataJson));
       }
     }
-    return  items;
+    return media;
   }
 
   @override
-  void initState(){
+  void initState() {
     fetchData().then((value) {
       setState(() {
-        _items.addAll(value);
+        _media.addAll(value);
       });
     });
     super.initState();
+    getStudentData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:ReusableWidgets.getAppBar('بنك الميديا'),
-        body: ListView.builder(
-          itemBuilder: (context, index){
-            return ReusableWidgets.getCard(_items[index].title,_items[index].thumbnailUrl,_items[index].url);
+        appBar: ReusableWidgets.getAppBar('بنك الميديا'),
+        body: FutureBuilder(
+          future: fetchData(),
+          builder: (context, snapshot1) {
+            if (snapshot1.hasData) {
+              return ListView.builder(
+                  itemBuilder: (context, index) {
+                    MediaData myproject = snapshot1.data[index];
+                    return Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: Card(
+                            color: Colors.white60,
+                            child: Column(children: [
+                              Padding(
+                                  padding: EdgeInsets.only(bottom: 15, top: 15),
+                                  child:
+                                      Text('fileName:  ' + myproject.fileName)),
+                              Padding(
+                                  padding: EdgeInsets.only(bottom: 15, top: 15),
+                                  child:
+                                      Text('Image Url: ' + myproject.fileUrl))
+                            ])));
+                  },
+                  itemCount: snapshot1.data.length);
+            }else{
+              print(student_id);
+            }
+            // By default, show a loading spinner.
+            return const CircularProgressIndicator();
           },
-          itemCount: _items.length,
         ));
   }
 }
-
-
