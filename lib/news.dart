@@ -136,7 +136,6 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
               if (snapshot1.hasData) {
                 return ListView.builder(itemBuilder: (context,index) {
                   Ads ad = snapshot1.data[index];
-                  Ads ad1 = snapshot1.data[1];
                   return Column(
                       children: [
                         Card(
@@ -144,9 +143,16 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
                             child: Column(
                                 children: [
                                   Padding(
-                                      padding: EdgeInsets.only(bottom: 15)),
-                                  Text(ad.adsText),
-                                  Image.network(ad1.adsImg)
+                                      padding: EdgeInsets.only(bottom: 15,top: 5),
+                                   child:  Text(ad.adsText)),
+                                  Container(
+                                      child:  Image.network(ad.adsImg,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Container(
+                                            color: Colors.grey.shade200,
+                                          ); //do something
+                                        },
+                                      )),
                                 ])),
                       ]);
                 },

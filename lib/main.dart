@@ -88,15 +88,16 @@ void main() async {
 
   SharedPreferences preferences = await SharedPreferences.getInstance();
   var email = preferences.getString('email');
+  var teacherEmail= preferences.getString('teacherEmail');
     runApp(
         MaterialApp(
           routes: {
             '/notification':(context) => Item3Screen()
           },
             debugShowCheckedModeBanner: true,
-            home: MessageHandler(child:email == null ? SplashScreen() : email == 'admin@gmail.com'
+            home: MessageHandler(child:email != null ? NewsScreen() : teacherEmail != null
                 ? Conversation()
-                : NewsScreen())));
+                : SplashScreen())));
   }
 
 class AppTheme {

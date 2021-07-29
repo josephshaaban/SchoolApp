@@ -33,6 +33,24 @@ class Data{
     }
   }
 
+class Absence {
+  String studentName;
+  int  studentId;
+  String  studentStatus;
+  String  note;
+  String  date;
+
+  Absence(this.studentStatus, this.studentId, this.note,
+      this.date, this.studentName);
+
+  Absence.fromJson(Map<String, dynamic> json){
+    studentName = json['studentName'];
+    studentStatus = json['studentStatus'];
+    note = json['note'];
+    date = json['date'];
+  }
+}
+
 class MediaData {
   String fileUrl;
   String fileName;
@@ -67,7 +85,19 @@ class Teacher{
     teacherAvatart= json['teacherAvatart'];
   }
 }
+class TeacherData{
+  int id;
+  TeacherData(this.id);
+  TeacherData.fromJson(Map<String, dynamic> json){
+    id= json['id'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    return data;
+  }
 
+}
 class News{
   String news;
   String link;
