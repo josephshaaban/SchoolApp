@@ -254,6 +254,7 @@ class _LoginPageState extends State<LoginPage> {
                                       preferences.setString('password', passwordController.text);
                                       preferences.setInt('student_id', student_id);
                                       preferences.setInt('classId', classId);
+                                      preferences.setInt('user_id', student_id);
                                       StudentData.fromJson(jsonResponse[0]);
                                       print(posts);
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),

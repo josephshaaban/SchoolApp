@@ -22,6 +22,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   final passwordController = TextEditingController();
 
   int student_id;
+  int userId;
   int classId;
   String identity;
   String identity1;
@@ -236,12 +237,12 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                       print(passwordController.text);
                                       SharedPreferences preferences =
                                           await SharedPreferences.getInstance();
-                                      preferences.setString(
-                                          'teacherEmail', emailController.text);
-                                      preferences.setString('teacherPassword',
-                                          passwordController.text);
+                                      preferences.setString('teacherEmail', emailController.text);
+                                      preferences.setString('teacherPassword', passwordController.text);
                                       TeacherData.fromJson(jsonResponse[0]);
                                       print(posts);
+                                      userId= posts[0].id;
+                                      preferences.setInt('user_id',userId);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(

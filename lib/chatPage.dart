@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:http/http.dart' as http;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'reusable.dart';
 import 'package:uuid/uuid.dart';
 
@@ -15,22 +17,50 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  int receiver_id;
   List<types.Message> _messages = [];
-  final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c',
-      imageUrl: "assets/images/account.png",
-      firstName: "UserName"
-  );
+  types.User _user;
+
+  Future getStudentData() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    int userId = preferences.getInt('user_id')??0;
+    receiver_id = preferences.getInt('id') ?? 0;
+    String imageUrl= preferences.getString('image_Url');
+    String firstName= preferences.getString('firstName');
+    setState(() {
+      _user =  types.User(
+          id: userId.toString(),
+          imageUrl: imageUrl,
+          firstName: firstName,
+      );
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _loadMessages();
+    getStudentData();
   }
 
-  void _addMessage(types.Message message) {
-    setState(() {
-      _messages.insert(0, message);
-    });
+  void _addMessage(types.Message message) async{
+
+    final url = Uri.parse('https://school-node-api.herokuapp.com/api/teacher/$receiver_id');
+    final headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Charset': 'utf-8'
+    };
+    final response = await post(url, headers: headers,
+        body: message.toJson()
+    );
+    if (response.statusCode == 200) {
+      setState(() {
+        _messages.insert(0, message);
+      });
+    }
+    else{
+      print(response.reasonPhrase);
+    }
   }
 
   void _handlePreviewDataFetched(
@@ -59,8 +89,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _loadMessages() async {
-    final response = await rootBundle.loadString('assets/messages.json');
-    final messages = (jsonDecode(response) as List)
+    var response =await http.get(Uri.parse('https://school-node-api.herokuapp.com/api/user'));
+    final messages = (jsonDecode(response.body) as List)
         .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
         .toList();
 
@@ -73,7 +103,9 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: ReusableWidgets.getAppBar("تواصل مع المشرف"),
-        body: Chat(
+        body:RefreshIndicator(
+            onRefresh: _loadMessages,
+            child: Chat(
           theme: const DefaultChatTheme(
               inputBackgroundColor: const Color(0xFF003746),
               primaryColor: const Color(0xFF003746),
@@ -85,7 +117,7 @@ class _ChatPageState extends State<ChatPage> {
           user: _user,
           showUserAvatars: true,
           showUserNames: true,
-        ));
+        )));
   }
 }
 
@@ -96,16 +128,3 @@ void choiceAction(String value, BuildContext context) async {
   }
 }
 
-//Future<Widget> _showButton() async{
-//SharedPreferences preferences = await SharedPreferences.getInstance();
-//var email = preferences.getString('email');
-//if (email=="admin@gmail.com"){
-
-//}
-//else {
-//return FloatingActionButton(
-//  backgroundColor: Colors.deepOrange[800],
-// child: Icon(Icons.add_shopping_cart),
-//onPressed: null);
-//}
-//}

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'main.dart';
 import 'chatPage.dart';
 import 'reusable.dart';
@@ -50,7 +52,11 @@ class _TeachersListState extends State<TeachersList> {
                 itemBuilder: (context, index) {
                   Teacher projecttt = snapshot.data[index];
                   return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                        preferences.setInt('id',projecttt.id);
+                        preferences.setString('image_Url', projecttt.teacherAvatart);
+                        preferences.setString('firstName', projecttt.teacherName);
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                               return ChatPage();
