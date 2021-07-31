@@ -97,7 +97,7 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
                                                 color: AppTheme.textColor,
                                                 child: Column(
                                                     children: <Widget>[
-                                                      Text(sName, style: TextStyle(
+                                                      Text(sName??'', style: TextStyle(
                                                           fontSize: 30,fontWeight: FontWeight.w900,
                                                           color: AppTheme.backgroundColor.withOpacity(1.0))),
                                                       Text(email??'', textAlign: TextAlign.center, style: TextStyle(
