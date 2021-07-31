@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:hello_world1/chatPage.dart';
 import 'package:hello_world1/identity.dart';
 import 'package:hello_world1/item1.dart';
 
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         Duration(seconds: 4),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => Item1Screen()))
+            builder: (BuildContext context) => ChatPage()))
     );
 
 //    var initializationSettingsAndroid=

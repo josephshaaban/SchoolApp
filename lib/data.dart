@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class Data{
   String name;
@@ -106,4 +107,12 @@ class Absence{
     studentStatus= json['studentStatus'];
     studentName= json['studentName'];
   }
+}
+
+class Messages{
+String text;
+Messages(this.text);
+Messages.fromJson(Map<String,dynamic> json){
+  text= json['text'];
+}
 }
