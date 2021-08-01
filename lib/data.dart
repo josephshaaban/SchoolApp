@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class Data{
   String name;
@@ -96,8 +97,8 @@ class TeacherData{
     data['id'] = this.id;
     return data;
   }
-
 }
+
 class News{
   String news;
   String link;
@@ -121,9 +122,10 @@ class School {
 
 class ChatUsers{
   String name;
-  String messageText;
   String image;
-  ChatUsers({@required this.name,@required this.messageText,@required this.image});
+  String messageText;
+
+  ChatUsers({@required this.name,@required this.image,@required this.messageText});
 }
 
 class StudentData {
@@ -141,3 +143,4 @@ class StudentData {
     return data;
   }
 }
+

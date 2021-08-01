@@ -46,7 +46,9 @@ class _ConversationState extends State<Conversation> {
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
     ),
     ChatUsers(name: "John Wick",
-      messageText: "How are you?"
+      messageText: "How are you?",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
+
     ),
   ];
 
@@ -55,7 +57,7 @@ class _ConversationState extends State<Conversation> {
   Future getEmail() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      email = preferences.getString ('email');
+      email = preferences.getString ('email')??'';
     });
   }
 
@@ -94,21 +96,11 @@ class _ConversationState extends State<Conversation> {
               padding: EdgeInsets.only(top: 16),
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                if (chatUsers[index].image==null) {
-                  return ConversationList(
-                      name: chatUsers[index].name,
-                      messageText: chatUsers[index].messageText,
-                    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBc-AEj_9MJQIUQqlgB0a9Nao0kuhi4ydeyQ&usqp=CAU"
-                    ,
-                  );
-                }
-                else{
                   return ConversationList(
                       name: chatUsers[index].name,
                       messageText: chatUsers[index].messageText,
                       imageUrl: chatUsers[index].image
                   );
-                }
               }
             ),
           ],
