@@ -43,9 +43,9 @@ class _ChatPageState extends State<ChatPage> {
     getStudentData();
   }
 
-  void _addMessage(types.Message message) async{
-
-    final url = Uri.parse('https://school-node-api.herokuapp.com/api/teacher/$receiver_id');
+  void _addMessage(types.Message message) async {
+    final url = Uri.parse(
+        'https://school-node-api.herokuapp.com/api/teacher/$receiver_id');
     final headers = {
       'Content-Type': 'application/json;charset=UTF-8',
       'Charset': 'utf-8'
@@ -57,8 +57,18 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {
         _messages.insert(0, message);
       });
+      final sharedMessages = await SharedPreferences.getInstance();
+      final key = 'saved_messages';
+      var savedMessages = sharedMessages.getStringList(key);
+      final messages = _messages.map((e) =>
+          types.Message.fromJson(
+              e as Map<String, dynamic>).toString()).toList();
+
+      // take care if there is any savedMessages and add the new messages to them.
+      sharedMessages.setStringList(key, savedMessages + messages);
+      print(messages);
     }
-    else{
+    else {
       print(response.reasonPhrase);
     }
   }
@@ -94,8 +104,17 @@ class _ChatPageState extends State<ChatPage> {
         .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
         .toList();
 
+    final sharedMessages = await SharedPreferences.getInstance();
+    final key = 'saved_messages';
+
+    // converts local messages from list of string to list of types.Messages
+    List<types.Message> savedMessages = sharedMessages
+        .getStringList(key)
+        .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
+        .toList();
+
     setState(() {
-      _messages = messages;
+      _messages = savedMessages + messages;
     });
   }
 
