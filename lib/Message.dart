@@ -15,7 +15,7 @@ class Message{
   Message.fromJson(Map<String, dynamic> json):
     text= json['text'],
     authorId  = json['authorId'],
-    createdAt=json[''],
+    createdAt=json['createdAt'],
     id=json['id'],
     firstName=json['firstName'],
     reciverId=json['reciverId'];

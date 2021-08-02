@@ -101,9 +101,10 @@ class _AllChatsPageState extends State<AllChatsPage> {
     if (email != null) {
       return Container(
           padding: EdgeInsets.only(left: 0, right: 5, top: 2, bottom: 2),
+          margin: EdgeInsets.only(left: 5, right: 10, top: 5, bottom: 5),
           height: 30,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(50),
             color: Colors.pink[50],
           ),
           child: MaterialButton(
