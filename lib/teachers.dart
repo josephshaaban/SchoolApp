@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world1/reusable.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'ChatPage.dart';
 import 'User.dart';
@@ -60,9 +61,7 @@ class _TeachersListState extends State<TeachersList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('All Chats'),
-      ),
+      appBar: ReusableWidgets.getAppBar('المشرفين'),
       body: buildAllChatList(),
     );
   }

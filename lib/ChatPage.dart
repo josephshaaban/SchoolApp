@@ -16,29 +16,37 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget buildSingleMessage(Message message) {
     return Container(
+      constraints: BoxConstraints(
+        maxWidth: double.infinity,
+      ),
+      decoration: BoxDecoration(
+        color: const Color(0xFF5F8E99),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       alignment: message.authorId == widget.friend.id
           ? Alignment.centerLeft
           : Alignment.centerRight,
-      padding: EdgeInsets.all(10.0),
-      margin: EdgeInsets.all(10.0),
-      child: Text(message.text),
+      // padding: EdgeInsets.only(top: 10.0, left: 5.0, right: 5),
+      margin: EdgeInsets.only(top: 10.0, left: 5.0, right: 5),
+      child: Padding(
+          padding: EdgeInsets.only(left: 5, right: 5),
+          child: Text(message.text,
+              softWrap: true,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
     );
   }
 
   Widget buildChatList() {
     return ScopedModelDescendant<ChatModel>(
       builder: (context, child, model) {
-        List<Message> messages =
-            model.getMessagesForReceiver(widget.friend);
-
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.75,
-          child: ListView.builder(
-            itemCount: messages.length,
-            itemBuilder: (BuildContext context, int index) {
-              return buildSingleMessage(messages[index]);
-            },
-          ),
+        List<Message> messages = model.getMessagesForReceiver(widget.friend);
+        return ListView.builder(
+          shrinkWrap: true,
+          // physics: ClampingScrollPhysics(),
+          itemCount: messages.length,
+          itemBuilder: (BuildContext context, int index) {
+            return buildSingleMessage(messages[index]);
+          },
         );
       },
     );
@@ -48,20 +56,38 @@ class _ChatPageState extends State<ChatPage> {
     return ScopedModelDescendant<ChatModel>(
       builder: (context, child, model) {
         return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25.0),
+              boxShadow: [
+                BoxShadow(
+                    offset: Offset(0, 3), blurRadius: 5, color: Colors.grey)
+              ]),
           child: Row(
             children: <Widget>[
               Container(
+                margin: EdgeInsets.only(left: 10, bottom: 5),
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
+                  autocorrect: true,
+                  autofocus: true,
+                  cursorColor: AppTheme.textColor,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  textAlignVertical: TextAlignVertical.bottom,
                   controller: textEditingController,
                 ),
               ),
               SizedBox(width: 10.0),
               FloatingActionButton(
+                backgroundColor: AppTheme.textColor,
                 onPressed: () {
-                  model.sendMessage(
-                      textEditingController.text, widget.friend);
-                  textEditingController.text = '';
+                  String messageText = textEditingController.text.trim();
+                  if (messageText == '' || messageText == null) {
+                  } else {
+                    model.sendMessage(messageText, widget.friend);
+                    textEditingController.text = '';
+                  }
                 },
                 elevation: 0,
                 child: Icon(Icons.send),
@@ -76,12 +102,13 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.friend.name),
-      ),
-      body: ListView(
+      appBar: ReusableWidgets.getAppBar(widget.friend.name),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        // shrinkWrap: true,
+        // physics: ClampingScrollPhysics(),
         children: <Widget>[
-          buildChatList(),
+          Expanded(child: buildChatList()),
           buildChatArea(),
         ],
       ),
