@@ -38,7 +38,7 @@ class ChatModel extends Model {
     // converts local messages from list of string to list of types.Messages
     List<String> savedMessages = sharedMessages.getStringList(key)??[];
     List<String> loadedMessagesAsStringList = loadedMessages.map(
-            (e) => Message.fromJson(e as Map<String, dynamic>).toString()
+            (e) => e.toJson().toString()
     ).toList();
 
     // save all messages
