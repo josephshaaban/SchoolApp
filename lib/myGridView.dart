@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'package:hello_world1/conversation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
 import 'item2.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:hello_world1/conversation.dart';
 import 'package:hello_world1/item3.dart';
 import 'splashScreen.dart';
 import 'package:flutter/cupertino.dart';

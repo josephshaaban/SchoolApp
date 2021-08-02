@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class Data{
   String name;

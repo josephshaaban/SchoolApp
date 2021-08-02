@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'conversation.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
