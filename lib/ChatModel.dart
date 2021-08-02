@@ -59,13 +59,13 @@ class ChatModel extends Model {
   }
 
    Future<List<User>> getChatList() async {
-    Set<User> chattedUser = Set();
+    Set<User> chattedUsers = Set();
     for (var message in this.messages){
-      chattedUser.add(
+      chattedUsers.add(
           User(message.receiverName, message.reciverId));
     }
-    this.chatList = chattedUser.toList();
-    return chattedUser.toList();
+    this.chatList = chattedUsers.toList();
+    return chattedUsers.toList();
   }
 
   Future<List<User>> getFriendList() async {
