@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world1/reusable.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'User.dart';
 import 'Message.dart';
 import 'ChatModel.dart';
+import 'main.dart';
 
 class ChatPage extends StatefulWidget {
   final User friend;
