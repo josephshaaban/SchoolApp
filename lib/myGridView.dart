@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:hello_world1/AllChatsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'main.dart';
 import 'item2.dart';
@@ -82,7 +83,7 @@ class MainObject extends StatelessWidget {
               break;
               case 4:
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Conversation()));
+                    MaterialPageRoute(builder: (context) => AllChatsPage()));
                 break;
                 case 5:
                   Navigator.push(context,

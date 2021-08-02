@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hello_world1/AllChatsPage.dart';
 import 'package:http/http.dart';
 import 'identity.dart';
 import 'package:flutter/cupertino.dart';
@@ -70,7 +71,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                 await SharedPreferences.getInstance();
                 preferences.setString("teacherEmail", key);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Conversation()));
+                    MaterialPageRoute(builder: (context) => AllChatsPage()));
               }
             }));
       });
@@ -246,7 +247,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                Conversation()),
+                                                AllChatsPage()),
                                       );
                                     } else {
                                       print(response.reasonPhrase);

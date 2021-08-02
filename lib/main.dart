@@ -1,9 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:hello_world1/item3.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'AllChatsPage.dart';
 import 'splashScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'news.dart';
+import 'ChatModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -89,14 +92,16 @@ void main() async {
   var email = preferences.getString('email');
   var teacherEmail= preferences.getString('teacherEmail');
     runApp(
-        MaterialApp(
+      ScopedModel(
+          model: ChatModel(),
+          child: MaterialApp(
           routes: {
             '/notification':(context) => Item3Screen()
           },
             debugShowCheckedModeBanner: true,
             home: MessageHandler(child:email != null ? NewsScreen() : teacherEmail != null
-                ? Conversation()
-                : SplashScreen())));
+                ? AllChatsPage()
+                : SplashScreen()))));
   }
 
 class AppTheme {
