@@ -5,8 +5,12 @@ class Message{
    String reciverId;
    String text;
    String id;
+   String receiverName;
 
-  Message(this.text,this.authorId,this.id,this.createdAt,this.firstName,this.reciverId);
+  Message(
+      this.text,  this.authorId,this.id, this.createdAt, this.firstName,
+      this.reciverId, this.receiverName,
+      );
 
   Message.fromJson(Map<String, dynamic> json):
     text= json['text'],

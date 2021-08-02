@@ -48,7 +48,7 @@ class _AllChatsPageState extends State<AllChatsPage> {
     return ScopedModelDescendant<ChatModel>(
       builder: (context, child, model) {
         return FutureBuilder<List<User>>(
-          future: model.getFriendList(),
+          future: model.getChatList(),
           builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
@@ -57,9 +57,9 @@ class _AllChatsPageState extends State<AllChatsPage> {
                 return Center(child: Text('Error: No teacher to chat. More: ${snapshot.error}'));
               else
                 return ListView.builder(
-                  itemCount: model.friendList.length,
+                  itemCount: model.chatList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    User friend = model.friendList[index];
+                    User friend = model.chatList[index];
                     return ListTile(
                       title: Text(friend.name),
                       onTap: () => friendClicked(friend),
@@ -77,51 +77,23 @@ class _AllChatsPageState extends State<AllChatsPage> {
   Widget build (BuildContext context) {
     if (email != null) {
       return Scaffold(
-          body:  Column( crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-          SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SafeArea(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            _addNewConversation(),
-                          ],
-                        ),
-                      ),
-                    ),
-                    buildAllChatList(),
-                  ]))]));
-    } else if (teacherEmail != null) {
+          appBar:AppBar(title: Text('المحادثات'),
+            backgroundColor: AppTheme.textColor,
+            actions: [
+              _addNewConversation()
+            ],),
+          body: buildAllChatList());
+    } else {
       return WillPopScope(
           onWillPop: () => SystemNavigator.pop(),
           child: Scaffold(
-              body: Column( crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[
-               SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SafeArea(
-                          child: Padding(
-                            padding:
-                            EdgeInsets.only(left: 16, right: 16, top: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                _addNewConversation(),
-                              ],
-                            ),
-                          ),
-                        ) ])),
-                        buildAllChatList(),
-          ]  )));
+              appBar:AppBar(title: Text('المحادثات'),
+                  backgroundColor: AppTheme.textColor,
+                  actions: [
+                    _addNewConversation()
+                  ]),
+              body:
+              buildAllChatList()));
     }
   }
 
@@ -139,15 +111,19 @@ class _AllChatsPageState extends State<AllChatsPage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => TeachersList()));
               },
+              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
               child: Row(children: [
                 Icon(Icons.add),
-                Text("Add New",
+                Text("محادثة جديدة",
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.textColor))
-              ])));
-    } else if (teacherEmail != null) {
+                        color: AppTheme.textColor)
+                )
+              ])
+          )
+      );
+    } else {
       return Container(
           padding: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
           decoration: BoxDecoration(
