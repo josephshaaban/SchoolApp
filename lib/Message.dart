@@ -14,11 +14,12 @@ class Message{
 
   Message.fromJson(Map<String, dynamic> json):
     text= json['text'],
-    authorId  = json['authorId'],
-    createdAt=json['createdAt'],
-    id=json['id'],
+    authorId  = json['authorId'].toString(),
+    createdAt=json['createdAt'].toString(),
+    id=json['id'].toString(),
     firstName=json['firstName'],
-    reciverId=json['reciverId'];
+    reciverId=json['reciverId'].toString(),
+   receiverName = json['receiverName']??'';
 
    Map<String, dynamic> toJson() => {
     'text': text,

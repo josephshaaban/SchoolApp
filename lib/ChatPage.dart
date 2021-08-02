@@ -44,7 +44,6 @@ class _ChatPageState extends State<ChatPage> {
         List<Message> messages = model.getMessagesForReceiver(widget.friend);
         return ListView.builder(
           shrinkWrap: true,
-          // physics: ClampingScrollPhysics(),
           itemCount: messages.length,
           itemBuilder: (BuildContext context, int index) {
             return buildSingleMessage(messages[index]);

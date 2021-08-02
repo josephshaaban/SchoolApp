@@ -8,6 +8,7 @@ import 'ChatPage.dart';
 import 'User.dart';
 import 'ChatModel.dart';
 import 'main.dart';
+import './Message.dart';
 
 class AllChatsPage extends StatefulWidget {
   @override
@@ -47,9 +48,9 @@ class _AllChatsPageState extends State<AllChatsPage> {
   Widget buildAllChatList() {
     return ScopedModelDescendant<ChatModel>(
       builder: (context, child, model) {
-        return FutureBuilder<List<User>>(
-          future: model.getChatList(),
-          builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
+        return FutureBuilder<List<Message>>(
+          future: model.getMessages(),
+          builder: (BuildContext context, AsyncSnapshot<List<Message>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else {

@@ -7,28 +7,66 @@ import './User.dart';
 import './Message.dart';
 
 class ChatModel extends Model {
-   User currentUser = User("Me", "0");
+   User currentUser;
    List<User> friendList = <User>[];
    List<Message> messages = <Message>[];
    List<User> chatList = <User>[];
 
+   void init() {
+     notifyListeners();
+   }
+
+   User getUserFromListById(List<User> users, userId){
+     final index = users.indexWhere((e) => e.id == userId);
+     return users[index];
+   }
+
+   List<Message> convertToMessageType(List<dynamic> msgList) {
+     User receiver = getUserFromListById(this.friendList, currentUser.id);
+     var resMessages = msgList.map(
+             (e) => e as Map<String, dynamic>).toList();
+     List<Message> finalMessages = <Message>[];
+     for (var resMessage in resMessages){
+       Message newMessage = Message(
+           resMessage["text"], resMessage["authorId"].toString(), Uuid().v4(),
+           resMessage["createdAt"].toString(), "firstName",
+           receiver.id.toString(), receiver.name);
+       finalMessages.add(newMessage);
+     }
+     return finalMessages;
+   }
+
   Future<List<Message>> getMessages() async {
+     initCurrentUser();
+     initFriendList();
     final receiverId = currentUser.id;
     final receiveMessageURL = Uri.parse('https://school-node-api.herokuapp.com/api/reciveMess/$receiverId/');
 
     var response = await http.get(receiveMessageURL);
 
-    var messages = <Message>[];
     if (response.statusCode == 200) {
-      var dataJson = json.decode(response.body);
-      for (var data in dataJson) {
-        messages.add(Message.fromJson(data));
-      }
+      List<dynamic> dataJsonList = json.decode(response.body) as List;
+
+      List<Message> finalMessageList = convertToMessageType(dataJsonList);
+
+      // final sharedMessages = await SharedPreferences.getInstance();
+      // final key = 'saved_messages';
+      //
+      // // converts local messages from list of string to list of types.Messages
+      // var savedMessages = json.decode(sharedMessages
+      //     .getStringList(key).toString())??json.decode([].toString());
+      // List<Message> messageList = <Message>[];
+      // for (var savedMessage in savedMessages) {
+      //   messageList.add(Message.fromJson(jsonDecode(savedMessage)));
+      // }
+      // List<Message> allMessagesAsMessageType = messageList + finalMessageList;
+
+      setChatList(finalMessageList);
+      return finalMessageList; // todo
     } else {
       print(response.reasonPhrase);
+      return <Message>[];
     }
-
-    return messages;
   }
 
    Future<List<String>> updateSavedMessages(List<Message> loadedMessages) async{
@@ -55,12 +93,13 @@ class ChatModel extends Model {
 
     // update messages for widget
     this.messages = allMessages.map(
-            (e) => Message.fromJson(e as Map<String, dynamic>)).toList();
+            (stringMessage) => Message.fromJson(
+                stringMessage as Map<String, dynamic>)).toList();
   }
 
-   Future<List<User>> getChatList() async {
+   List<User> setChatList(List<Message> loadedMessages) {
     Set<User> chattedUsers = Set();
-    for (var message in this.messages){
+    for (var message in loadedMessages){
       chattedUsers.add(
           User(message.receiverName, message.reciverId));
     }
@@ -69,6 +108,7 @@ class ChatModel extends Model {
   }
 
   Future<List<User>> getFriendList() async {
+    // todo: add message getter to set chatList
     final allowedChatUsersURL = Uri.parse('https://school-node-api.herokuapp.com/api/teacher/1/');
 
     var response = await http.get(allowedChatUsersURL);
@@ -83,8 +123,6 @@ class ChatModel extends Model {
       print(response.reasonPhrase);
     }
     this.friendList = userList;
-    initCurrentUser();
-    initMessages();
     return userList;
   }
 
@@ -96,14 +134,6 @@ class ChatModel extends Model {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userId = preferences.getInt('user_id')??0;
     this.currentUser = User('Me', userId.toString());
-  }
-
-  void init() {
-    this.friendList = <User>[];
-    this.messages = <Message>[];
-    this.currentUser = User('Me', "0");
-
-    notifyListeners();
   }
 
   void sendMessage(String text, User receiver) async{
