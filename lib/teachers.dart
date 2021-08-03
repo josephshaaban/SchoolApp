@@ -18,11 +18,11 @@ class _TeachersListState extends State<TeachersList> {
     ScopedModel.of<ChatModel>(context, rebuildOnChange: false).init();
   }
 
-  void friendClicked(User friend) {
+  void chatUserClicked(User chatUser) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) {
-          return ChatPage(friend);
+          return ChatPage(chatUser);
         },
       ),
     );
@@ -32,7 +32,7 @@ class _TeachersListState extends State<TeachersList> {
     return ScopedModelDescendant<ChatModel>(
       builder: (context, child, model) {
         return FutureBuilder<List<User>>(
-          future: model.getFriendList(),
+          future: model.getChatUserList(),
           builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
@@ -41,12 +41,12 @@ class _TeachersListState extends State<TeachersList> {
                 return Center(child: Text('Error: No teacher to chat. More: ${snapshot.error}'));
               else
                 return ListView.builder(
-                  itemCount: model.friendList.length,
+                  itemCount: model.chatUserList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    User friend = model.friendList[index];
+                    User chatUser = model.chatUserList[index];
                     return ListTile(
-                      title: Text(friend.name),
-                      onTap: () => friendClicked(friend),
+                      title: Text(chatUser.name),
+                      onTap: () => chatUserClicked(chatUser),
                     );
                   },
                 );  // snapshot.data  :- get your object which is pass from your downloadData() function

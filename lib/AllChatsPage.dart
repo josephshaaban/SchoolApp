@@ -35,11 +35,11 @@ class _AllChatsPageState extends State<AllChatsPage> {
     getEmail();
   }
 
-  void friendClicked(User friend) {
+  void chatUserClicked(User chatUser) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) {
-          return ChatPage(friend);
+          return ChatPage(chatUser);
         },
       ),
     );
@@ -60,10 +60,10 @@ class _AllChatsPageState extends State<AllChatsPage> {
                 return ListView.builder(
                   itemCount: model.chatList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    User friend = model.chatList[index];
+                    User chatUser = model.chatList[index];
                     return ListTile(
-                      title: Text(friend.name),
-                      onTap: () => friendClicked(friend),
+                      title: Text(chatUser.name),
+                      onTap: () => chatUserClicked(chatUser),
                     );
                   },
                 );  // snapshot.data  :- get your object which is pass from your downloadData() function

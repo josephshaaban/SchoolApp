@@ -7,8 +7,8 @@ import 'ChatModel.dart';
 import 'main.dart';
 
 class ChatPage extends StatefulWidget {
-  final User friend;
-  ChatPage(this.friend);
+  final User chatUser;
+  ChatPage(this.chatUser);
   @override
   _ChatPageState createState() => _ChatPageState();
 }
@@ -25,7 +25,7 @@ class _ChatPageState extends State<ChatPage> {
         color: const Color(0xFF5F8E99),
         borderRadius: BorderRadius.circular(10.0),
       ),
-      alignment: message.authorId == widget.friend.id
+      alignment: message.authorId == widget.chatUser.id
           ? Alignment.centerLeft
           : Alignment.centerRight,
       // padding: EdgeInsets.only(top: 10.0, left: 5.0, right: 5),
@@ -41,7 +41,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget buildChatList() {
     return ScopedModelDescendant<ChatModel>(
       builder: (context, child, model) {
-        List<Message> messages = model.getMessagesForReceiver(widget.friend);
+        List<Message> messages = model.getMessagesForReceiver(widget.chatUser);
         return ListView.builder(
           shrinkWrap: true,
           itemCount: messages.length,
@@ -86,7 +86,7 @@ class _ChatPageState extends State<ChatPage> {
                   String messageText = textEditingController.text.trim();
                   if (messageText == '' || messageText == null) {
                   } else {
-                    model.sendMessage(messageText, widget.friend);
+                    model.sendMessage(messageText, widget.chatUser);
                     textEditingController.text = '';
                   }
                 },
@@ -103,7 +103,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ReusableWidgets.getAppBar(widget.friend.name),
+      appBar: ReusableWidgets.getAppBar(widget.chatUser.name),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         // shrinkWrap: true,
