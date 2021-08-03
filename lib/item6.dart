@@ -12,7 +12,7 @@ class Item6Screen extends StatefulWidget {
 }
 
 class _Item6ScreenState extends State<Item6Screen> {
-  int student_id;
+  String student_id;
   int classId;
 
   List<MediaData> _media = <MediaData>[];
@@ -20,7 +20,7 @@ class _Item6ScreenState extends State<Item6Screen> {
   Future getStudentData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      student_id = preferences.getInt('student_id') ?? 0;
+      student_id = preferences.getString('student_id') ?? 0;
       classId = preferences.getInt('classId') ?? 0;
     });
   }

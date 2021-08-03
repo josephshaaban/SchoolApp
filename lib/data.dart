@@ -35,7 +35,7 @@ class Data{
 
 class Absence {
   String studentName;
-  int  studentId;
+  String  studentId;
   String  studentStatus;
   String  note;
   String  date;
@@ -75,7 +75,7 @@ class Ads{
 
 
 class Teacher{
-  int id;
+  String id;
   String teacherName;
   String teacherAvatart;
   Teacher(this.teacherAvatart, this.teacherName, this.id);
@@ -86,7 +86,7 @@ class Teacher{
   }
 }
 class TeacherData{
-  int id;
+  String id;
   TeacherData(this.id);
   TeacherData.fromJson(Map<String, dynamic> json){
     id= json['id'];
@@ -128,7 +128,7 @@ class ChatUsers{
 }
 
 class StudentData {
-  int student_id;
+  String student_id;
   int classId;
   StudentData(this.student_id, this.classId);
   StudentData.fromJson(Map<String, dynamic> json){

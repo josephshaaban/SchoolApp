@@ -18,14 +18,14 @@ class MyGridView extends StatefulWidget {
 class _MyGridViewState extends State<MyGridView> {
 
   int school_Id;
-  int student_id;
+  String student_id;
   int classId;
 
   Future getStudentData() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       school_Id = preferences.getInt('school_Id')??0;
-      student_id=  preferences.getInt('student_id')??0;
+      student_id=  preferences.getString('student_id')??0;
       classId= preferences.getInt('classId')??0;
     });
   }

@@ -21,8 +21,8 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  int student_id;
-  int userId;
+  String student_id;
+  String userId;
   int classId;
   String identity;
   String identity1;
@@ -242,7 +242,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                       TeacherData.fromJson(jsonResponse[0]);
                                       print(posts);
                                       userId= posts[0].id;
-                                      preferences.setInt('user_id',userId);
+                                      preferences.setString('user_id',userId);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(

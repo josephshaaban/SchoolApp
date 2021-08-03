@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   String email = '';
   String password = '';
   String sName;
-  int student_id;
+  String student_id;
   int classId;
   String identity;
   String identity1;
@@ -252,9 +252,9 @@ class _LoginPageState extends State<LoginPage> {
                                       await SharedPreferences.getInstance();
                                       preferences.setString('email', emailController.text);
                                       preferences.setString('password', passwordController.text);
-                                      preferences.setInt('student_id', student_id);
+                                      preferences.setString('student_id', student_id);
                                       preferences.setInt('classId', classId);
-                                      preferences.setInt('user_id', student_id);
+                                      preferences.setString('user_id', student_id);
                                       StudentData.fromJson(jsonResponse[0]);
                                       print(posts);
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => NewsScreen()),

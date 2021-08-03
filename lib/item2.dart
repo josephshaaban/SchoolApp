@@ -13,7 +13,7 @@ class Item2Screen extends StatefulWidget {
 }
 
 class _Item2ScreenState extends State<Item2Screen> {
-  int student_id;
+  String student_id;
   int classId;
 
   List<News> _news = <News>[];
@@ -34,7 +34,7 @@ class _Item2ScreenState extends State<Item2Screen> {
   Future getStudentData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      student_id = preferences.getInt('student_id') ?? 0;
+      student_id = preferences.getString('student_id') ?? 0;
       classId = preferences.getInt('classId') ?? 0;
     });
   }

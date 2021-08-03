@@ -34,7 +34,7 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
 
   String email= "";
   String sName = '';
-  int student_id;
+  String student_id;
   int classId;
 
   Future getStudentData() async{
@@ -42,7 +42,7 @@ class _NewsScreenState extends State<NewsScreen> with AfterLayoutMixin<NewsScree
     setState(() {
       email = preferences.getString ('email');
       sName= preferences.getString('sName');
-      student_id=  preferences.getInt('student_id')??0;
+      student_id=  preferences.getString('student_id')??0;
       classId=  preferences.getInt('classId')??0;
     });
   }

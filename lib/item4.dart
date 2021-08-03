@@ -14,7 +14,7 @@ class Item4Screen extends StatefulWidget {
 }
 
 class _Item4ScreenState extends State<Item4Screen> {
-  int student_id;
+  String student_id;
   int classId;
 
   List<ExamData> _examdata = <ExamData>[];
@@ -22,7 +22,7 @@ class _Item4ScreenState extends State<Item4Screen> {
   Future getStudentData() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      student_id=  preferences.getInt('student_id')??0;
+      student_id=  preferences.getString('student_id')??0;
       classId= preferences.getInt('classId')??0;
     });
   }
