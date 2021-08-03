@@ -29,7 +29,7 @@ class ChatModel extends Model {
      for (var resMessage in resMessages){
        Message newMessage = Message(
            resMessage["text"], resMessage["authorId"].toString(), Uuid().v4(),
-           resMessage["createdAt"].toString(), "firstName",
+           resMessage["createdAt"].toString(), resMessage["autherName"],
            receiver.id.toString(), receiver.name);
        finalMessages.add(newMessage);
      }
@@ -101,7 +101,7 @@ class ChatModel extends Model {
     Set<User> chattedUsers = Set();
     for (var message in loadedMessages){
       chattedUsers.add(
-          User(message.receiverName, message.reciverId));
+          User(message.autherName, message.authorId));
     }
     this.chatList = chattedUsers.toList();
     return chattedUsers.toList();
@@ -133,7 +133,8 @@ class ChatModel extends Model {
   void initCurrentUser() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userId = preferences.getInt('user_id')??0;
-    this.currentUser = User('Me', userId.toString());
+    var email = preferences.getString('email');
+    this.currentUser = User(email, userId.toString());
   }
 
   void sendMessage(String text, User receiver) async{

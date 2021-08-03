@@ -1,6 +1,6 @@
 class Message{
    String authorId;
-   String firstName;
+   String autherName;
    String createdAt;
    String reciverId;
    String text;
@@ -8,7 +8,7 @@ class Message{
    String receiverName;
 
   Message(
-      this.text,  this.authorId,this.id, this.createdAt, this.firstName,
+      this.text,  this.authorId,this.id, this.createdAt, this.autherName,
       this.reciverId, this.receiverName,
       );
 
@@ -17,16 +17,17 @@ class Message{
     authorId  = json['authorId'].toString(),
     createdAt=json['createdAt'].toString(),
     id=json['id'].toString(),
-    firstName=json['firstName'],
+    autherName=json['autherName'],
     reciverId=json['reciverId'].toString(),
-   receiverName = json['receiverName']??'';
+   receiverName = json['firstName']??'';
 
    Map<String, dynamic> toJson() => {
     'text': text,
     'authorId': authorId,
     'createdAt': createdAt,
     'id': id,
-    'firstName': firstName,
-    'reciverId': reciverId
+    'firstName': receiverName,
+    'reciverId': reciverId,
+     'autherName': autherName,
   };
 }
