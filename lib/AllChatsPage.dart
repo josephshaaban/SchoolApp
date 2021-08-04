@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hello_world1/reusable.dart';
-import 'package:hello_world1/teachers.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ChatPage.dart';
@@ -55,10 +54,11 @@ class _AllChatsPageState extends State<AllChatsPage> {
               return const CircularProgressIndicator();
             } else {
               if (snapshot.hasError)
-                return Center(child: Text('Error: No teacher to chat. More: ${snapshot.error}'));
+                return Center(child: Text(
+                    'Error: No teacher to chat. More: ${snapshot.error}'));
               else
                 return ListView.builder(
-                  itemCount: model.chatList.length,
+                  itemCount: model.chatUserList.length,
                   itemBuilder: (BuildContext context, int index) {
                     User chatUser = model.chatList[index];
                     return ListTile(
@@ -66,7 +66,7 @@ class _AllChatsPageState extends State<AllChatsPage> {
                       onTap: () => chatUserClicked(chatUser),
                     );
                   },
-                );  // snapshot.data  :- get your object which is pass from your downloadData() function
+                ); // snapshot.data  :- get your object which is pass from your downloadData() function
             }
           },
         );
@@ -75,20 +75,17 @@ class _AllChatsPageState extends State<AllChatsPage> {
   }
 
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     if (email != null) {
       return Scaffold(
-          appBar:AppBar(title: Text('المحادثات'),
-            backgroundColor: AppTheme.textColor,
-            actions: [
-              _addNewConversation()
-            ],),
-          body: buildAllChatList());
+          appBar: AppBar(title: Text('المشرفين'),
+            backgroundColor: AppTheme.textColor),
+          body: buildAllList());
     } else {
       return WillPopScope(
           onWillPop: () => SystemNavigator.pop(),
           child: Scaffold(
-              appBar:AppBar(title: Text('المحادثات'),
+              appBar: AppBar(title: Text('المحادثات'),
                   backgroundColor: AppTheme.textColor,
                   actions: [
                     _addNewConversation()
@@ -99,33 +96,6 @@ class _AllChatsPageState extends State<AllChatsPage> {
   }
 
   Widget _addNewConversation() {
-    if (email != null) {
-      return Container(
-          padding: EdgeInsets.only(left: 0, right: 5, top: 2, bottom: 2),
-          margin: EdgeInsets.only(left: 5, right: 10, top: 5, bottom: 5),
-          height: 30,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: Colors.pink[50],
-          ),
-          child: MaterialButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TeachersList()));
-              },
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Row(children: [
-                Icon(Icons.add),
-                Text("محادثة جديدة",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textColor)
-                )
-              ])
-          )
-      );
-    } else {
       return Container(
           padding: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
           decoration: BoxDecoration(
@@ -133,6 +103,36 @@ class _AllChatsPageState extends State<AllChatsPage> {
             color: AppTheme.textColor,
           ),
           child: MyMaterialButton());
-    }
+  }
+
+  Widget buildAllList() {
+    return ScopedModelDescendant<ChatModel>(
+      builder: (context, child, model) {
+        return FutureBuilder<List<User>>(
+          future: model.getChatUserList(),
+          builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else {
+              if (snapshot.hasError)
+                return Center(child: Text(
+                    'Error: No teacher to chat. More: ${snapshot.error}'));
+              else
+                return ListView.builder(
+                  itemCount: model.chatUserList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    User chatUser = model.chatUserList[index];
+                    return ListTile(
+                      title: Text(chatUser.name),
+                      onTap: () => chatUserClicked(chatUser),
+                    );
+                  },
+                ); // snapshot.data  :- get your object which is pass from your downloadData() function
+            }
+          },
+        );
+      },
+    );
   }
 }
+

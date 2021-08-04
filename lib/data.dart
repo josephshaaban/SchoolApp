@@ -86,7 +86,7 @@ class Teacher{
   }
 }
 class TeacherData{
-  String id;
+  int id;
   TeacherData(this.id);
   TeacherData.fromJson(Map<String, dynamic> json){
     id= json['id'];

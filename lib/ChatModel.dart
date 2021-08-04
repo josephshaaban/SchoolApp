@@ -90,9 +90,10 @@ class ChatModel extends Model {
 
    void setChatList(List<Message> loadedMessages) {
     for (var message in loadedMessages){
-      if (message.authorId == currentUser.id)
-        continue;
-      if (chatIdsSet.add(message.authorId)) {
+      if (chatIdsSet.add(message.id)){
+   //  if (message.authorId == currentUser.id)
+     //   continue;
+      //if (chatIdsSet.add(message.authorId)) {
         this.chatList.add(
             User(message.authorName, message.authorId));
       }
@@ -121,7 +122,7 @@ class ChatModel extends Model {
 
   void initCurrentUser() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString('user_id')??0;
+    var userId = preferences.getString('user_id')??'';
     var email = preferences.getString('email');
     this.currentUser = User(email, userId.toString());
   }

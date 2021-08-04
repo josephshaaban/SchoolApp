@@ -67,7 +67,7 @@ class _ChatPageState extends State<ChatPage> {
           child: Row(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(left: 10, bottom: 5),
+                margin: EdgeInsets.only(left: 5, bottom: 5),
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
                   autocorrect: true,
